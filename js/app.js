@@ -405,17 +405,15 @@
           }">${escapeHtml(label)}</button>`;
         }).join('');
 
-        // 2. Sidebar List
-        sidebarList.innerHTML = state.categories.map(cat => {
-          const count = state.videos.filter(v => v.category.toLowerCase() === cat.toLowerCase()).length;
-          const isActive = state.activeCategory.toLowerCase() === cat.toLowerCase();
-          return `<button type="button" data-cat-pill="${escapeHtml(cat)}" class="w-full text-left px-2.5 py-1.5 rounded flex items-center justify-between transition ${
-            isActive ? 'bg-[#ff9000] text-black font-bold' : 'text-gray-300 hover:bg-[#242424]'
-          }">
-            <span class="truncate">${escapeHtml(cat)}</span>
-            <span class="text-xs ${isActive ? 'text-black font-extrabold' : 'text-gray-500'}">${count}</span>
-          </button>`;
-        }).join('');
+        // 2. Sidebar List (Static HTML preserved — only toggle active highlight class)
+        if (sidebarList) {
+          sidebarList.querySelectorAll('[data-cat-pill]').forEach(btn => {
+            const cat = btn.getAttribute('data-cat-pill') || '';
+            const isActive = state.activeCategory.toLowerCase() === cat.toLowerCase();
+            btn.className = 'sidebar-cat-item w-full text-left px-2.5 py-1.5 rounded flex items-center justify-between transition ' +
+              (isActive ? 'bg-[#ff9000] text-black font-bold' : 'text-gray-300 hover:bg-[#242424]');
+          });
+        }
 
         // 3. Dropdowns
         headerSelect.innerHTML = `<option value="all">All Categories</option>` +
@@ -880,6 +878,7 @@
       document.addEventListener('click', (e) => {
         const navBtn = e.target.closest('[data-nav]');
         if (navBtn) {
+          closeMobileSidebar();
           switchView(navBtn.getAttribute('data-nav'));
           return;
         }
@@ -895,6 +894,7 @@
         const catPill = e.target.closest('[data-cat-pill]');
         if (catPill) {
           state.activeCategory = catPill.getAttribute('data-cat-pill');
+          closeMobileSidebar();
           switchView('home');
           renderAll();
           return;
@@ -923,6 +923,7 @@
         if (sortBtn) {
           state.activeSort = sortBtn.getAttribute('data-sort-btn');
           document.getElementById('feedSortSelect').value = state.activeSort;
+          closeMobileSidebar();
           switchView('home');
           renderAll();
           return;
@@ -989,11 +990,25 @@
         });
       }
 
-      // Mobile Sidebar Toggle
+      if (sb.classList.contains('hidden')) {
+          openMobileSidebar();
+        } else {
+          closeMobileSidebar();
+        }
       document.getElementById('mobileSidebarBtn').addEventListener('click', () => {
         const sb = document.getElementById('leftSidebar');
-        sb.classList.toggle('hidden');
+        if (sb.classList.contains('hidden')) {
+          openMobileSidebar();
+        } else {
+          closeMobileSidebar();
+        }
       });
+      
+      const closeSbBtn = document.getElementById('closeMobileSidebarBtn');
+      if (closeSbBtn) closeSbBtn.addEventListener('click', closeMobileSidebar);
+
+      const sbBackdrop = document.getElementById('mobileSidebarBackdrop');
+      if (sbBackdrop) sbBackdrop.addEventListener('click', closeMobileSidebar);
 
       // Search Input & Form
       const searchInput = document.getElementById('searchInput');

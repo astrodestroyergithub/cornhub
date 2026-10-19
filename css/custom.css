@@ -45,19 +45,3 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    @media (max-width: 1023px) {
-      #leftSidebar {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 50;
-        width: 18rem;
-        max-width: 85vw;
-        background-color: #121212;
-        padding: 1rem;
-        overflow-y: auto;
-        border-right: 1px solid #2e2e2e;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
-      }
-    }
