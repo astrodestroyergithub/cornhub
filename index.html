@@ -1,0 +1,2378 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CornHub — World's Best Plaform for Streaming Explicit Content</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            hub: {
+              black: '#000000',
+              bg: '#0f0f0f',
+              surface: '#1b1b1b',
+              card: '#181818',
+              hover: '#262626',
+              border: '#2e2e2e',
+              orange: '#ff9000',
+              orangeHover: '#ffa32a',
+              muted: '#9ca3af',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background-color: #0f0f0f;
+      color: #f3f4f6;
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    /* Custom dark scrollbars */
+    ::-webkit-scrollbar { width: 8px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f0f0f; }
+    ::-webkit-scrollbar-thumb { background: #333333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #ff9000; }
+
+    .hub-logo-pill {
+      background-color: #ff9000;
+      color: #000000;
+      border-radius: 5px;
+      padding: 1px 7px;
+      margin-left: 3px;
+      font-weight: 900;
+      display: inline-block;
+      line-height: 1.15;
+    }
+    .nav-tab-active {
+      color: #ffffff !important;
+      border-bottom: 3px solid #ff9000;
+      background-color: #1f1f1f;
+    }
+    .video-card:hover .video-title {
+      color: #ff9000;
+    }
+    .video-card:hover .thumb-overlay {
+      opacity: 1;
+    }
+    .video-card .preview-bar {
+      width: 0%;
+      transition: width 1.6s linear;
+    }
+    .video-card:hover .preview-bar {
+      width: 100%;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#0f0f0f] text-gray-100 selection:bg-[#ff9000] selection:text-black">
+
+  <!-- TOP NETWORK STRIP -->
+  <div class="bg-black border-b border-[#222] text-[11px] text-gray-400 px-3 sm:px-6 py-1.5 flex items-center justify-between">
+    <div class="flex items-center space-x-3 sm:space-x-5 overflow-x-auto whitespace-nowrap">
+      <span class="text-white font-semibold uppercase tracking-wider">Network</span>
+      <button type="button" data-nav="home" class="hover:text-[#ff9000] transition">CornHub</button>
+      <button type="button" data-nav="photos" class="hover:text-[#ff9000] transition">SnapHub</button>
+      <button type="button" data-nav="categories" class="hover:text-[#ff9000] transition">CategoryIndex</button>
+      <button type="button" data-nav="channels" class="hover:text-[#ff9000] transition hidden sm:inline">Verified Creators</button>
+      <button type="button" data-nav="admin" class="text-[#ff9000] font-semibold hover:underline">Admin Studio</button>
+    </div>
+    <div class="flex items-center space-x-3 shrink-0">
+      <span class="hidden md:inline text-gray-500">Status: <strong class="text-emerald-400">Gooners Edge Ready</strong></span>
+      <span class="bg-[#222] text-gray-300 px-2 py-0.5 rounded text-[10px] font-mono">EN / 4K</span>
+    </div>
+  </div>
+
+  <!-- MAIN HEADER -->
+  <header class="bg-[#141414] border-b border-[#2a2a2a] sticky top-0 z-40 shadow-lg">
+    <div class="max-w-[1600px] mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Left: Mobile Menu Button + Logo -->
+      <div class="flex items-center space-x-3">
+        <button id="mobileSidebarBtn" type="button" aria-label="Toggle Menu" class="lg:hidden p-2 rounded bg-[#222] hover:bg-[#333] text-gray-200 focus:outline-none">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+
+        <button type="button" data-nav="home" class="flex items-center text-2xl sm:text-3xl font-black tracking-tight focus:outline-none">
+          <span id="brandPrefixText" class="text-white">Corn</span><span id="brandSuffixText" class="hub-logo-pill">Hub</span>
+        </button>
+      </div>
+
+      <!-- Center: Search Bar + Category Filter -->
+      <div class="order-3 md:order-2 w-full md:w-auto md:flex-1 max-w-2xl mx-auto">
+        <form id="searchForm" class="flex items-center w-full">
+          <select id="headerCategorySelect" aria-label="Filter category" class="bg-[#222] text-gray-300 text-xs sm:text-sm px-2.5 py-2.5 rounded-l-md border border-r-0 border-[#383838] focus:outline-none focus:border-[#ff9000]">
+            <option value="all">All Categories</option>
+          </select>
+          <div class="relative flex-1">
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Search 4K videos for gooning, creators, tags, or external streams..."
+              class="w-full bg-[#262626] text-white text-sm px-3.5 py-2 border border-[#383838] focus:outline-none focus:border-[#ff9000] placeholder-gray-500"
+            />
+            <button
+              id="clearSearchBtn"
+              type="button"
+              title="Clear search"
+              class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs bg-[#333] px-1.5 py-0.5 rounded"
+            >ESC</button>
+          </div>
+          <button
+            type="submit"
+            aria-label="Search"
+            class="bg-[#ff9000] hover:bg-[#ffa32a] text-black font-bold px-4 sm:px-5 py-2 rounded-r-md border border-[#ff9000] transition flex items-center justify-center"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- Right: Quick Upload & Admin Controls -->
+      <div class="order-2 md:order-3 flex items-center space-x-2 sm:space-x-3">
+        <button
+          type="button"
+          data-open-admin="video"
+          class="bg-[#262626] hover:bg-[#333] border border-[#3a3a3a] text-white text-xs sm:text-sm font-semibold px-3 py-2 rounded flex items-center space-x-1.5 transition"
+        >
+          <svg class="w-4 h-4 text-[#ff9000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+          </svg>
+          <span>+ Video / Link</span>
+        </button>
+
+        <button
+          type="button"
+          data-open-admin="photo"
+          class="hidden sm:flex bg-[#262626] hover:bg-[#333] border border-[#3a3a3a] text-white text-xs sm:text-sm font-semibold px-3 py-2 rounded items-center space-x-1.5 transition"
+        >
+          <svg class="w-4 h-4 text-[#ff9000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          <span>+ Photo</span>
+        </button>
+
+        <button
+          type="button"
+          data-nav="admin"
+          class="bg-[#ff9000] hover:bg-[#ffa32a] text-black text-xs sm:text-sm font-extrabold px-3.5 py-2 rounded flex items-center space-x-1.5 transition shadow"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          <span>ADMIN</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- PRIMARY NAVIGATION TABS -->
+    <nav class="bg-[#1b1b1b] border-t border-[#282828] overflow-x-auto">
+      <div class="max-w-[1600px] mx-auto px-3 sm:px-6 flex items-center justify-between">
+        <div class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm font-bold tracking-wide uppercase whitespace-nowrap">
+          <button type="button" data-nav="home" class="nav-tab nav-tab-active px-3.5 sm:px-5 py-3 text-gray-300 hover:text-white transition">
+            Home Feed
+          </button>
+          <button type="button" data-nav="categories" class="nav-tab px-3.5 sm:px-5 py-3 text-gray-300 hover:text-white transition">
+            Categories
+          </button>
+          <button type="button" data-nav="photos" class="nav-tab px-3.5 sm:px-5 py-3 text-gray-300 hover:text-white transition flex items-center space-x-1.5">
+            <span>Photos & Gallery</span>
+            <span id="navPhotoCount" class="bg-[#2d2d2d] text-[#ff9000] text-[10px] px-1.5 py-0.5 rounded">6</span>
+          </button>
+          <button type="button" data-nav="channels" class="nav-tab px-3.5 sm:px-5 py-3 text-gray-300 hover:text-white transition">
+            Creators & Channels
+          </button>
+          <button type="button" data-nav="admin" class="nav-tab px-3.5 sm:px-5 py-3 text-[#ff9000] hover:text-white transition flex items-center space-x-1.5">
+            <span>Admin Upload Studio</span>
+          </button>
+          <button type="button" data-nav="contact" class="nav-tab px-3.5 sm:px-5 py-3 text-gray-300 hover:text-white transition">
+            Contact & Support
+          </button>
+        </div>
+
+        <div class="hidden xl:flex items-center space-x-4 text-xs text-gray-400">
+          <span>Total Videos: <strong id="headerVideoStat" class="text-white">12</strong></span>
+          <span>External Links: <strong id="headerExternalStat" class="text-[#ff9000]">4</strong></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HORIZONTAL CATEGORY PILL BAR -->
+    <div class="bg-[#121212] border-t border-[#222] py-2 px-3 sm:px-6">
+      <div id="categoryPillBar" class="max-w-[1600px] mx-auto flex items-center space-x-2 overflow-x-auto whitespace-nowrap pb-0.5">
+        <!-- Populated dynamically via JS -->
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <div class="max-w-[1600px] w-full mx-auto flex-1 flex px-3 sm:px-6 py-5 gap-6 relative">
+
+    <!-- COLLAPSIBLE LEFT SIDEBAR (Desktop persistent, Mobile drawer) -->
+    <aside id="leftSidebar" class="hidden lg:block w-60 shrink-0 space-y-5">
+      <div class="bg-[#181818] border border-[#282828] rounded-md p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xs font-extrabold uppercase tracking-wider text-[#ff9000]">Discover Feed</h2>
+          <span class="text-[10px] bg-[#262626] text-gray-400 px-1.5 py-0.5 rounded">LIVE</span>
+        </div>
+        <ul class="space-y-1 text-sm">
+          <li>
+            <button type="button" data-sort-btn="recommended" class="sidebar-sort-btn w-full text-left px-2.5 py-2 rounded bg-[#262626] text-white font-semibold flex items-center justify-between">
+              <span>Recommended</span>
+              <span class="text-[#ff9000] text-xs">Hot</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-sort-btn="views" class="sidebar-sort-btn w-full text-left px-2.5 py-2 rounded hover:bg-[#222] text-gray-300 flex items-center justify-between">
+              <span>Most Viewed</span>
+              <span class="text-gray-500 text-xs">Top</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-sort-btn="rating" class="sidebar-sort-btn w-full text-left px-2.5 py-2 rounded hover:bg-[#222] text-gray-300 flex items-center justify-between">
+              <span>Top Rated (95%+)</span>
+              <span class="text-emerald-400 text-xs">99%</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-sort-btn="newest" class="sidebar-sort-btn w-full text-left px-2.5 py-2 rounded hover:bg-[#222] text-gray-300 flex items-center justify-between">
+              <span>Newest Uploads</span>
+              <span class="text-gray-500 text-xs">New</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-sort-btn="external" class="sidebar-sort-btn w-full text-left px-2.5 py-2 rounded hover:bg-[#222] text-gray-300 flex items-center justify-between">
+              <span>External Partner Links</span>
+              <span class="text-[#ff9000] text-xs">Link</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Sidebar Categories List -->
+      <div class="bg-[#181818] border border-[#282828] rounded-md p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xs font-extrabold uppercase tracking-wider text-gray-300">Filter by Category</h2>
+          <button type="button" data-nav="categories" class="text-[11px] text-[#ff9000] hover:underline">View All</button>
+        </div>
+        <div id="sidebarCategoryList" class="space-y-1 max-h-80 overflow-y-auto pr-1 text-sm">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Quick Admin Card -->
+      <div class="bg-gradient-to-br from-[#1f1a12] to-[#161616] border border-[#ff9000]/40 rounded-md p-4">
+        <div class="flex items-center space-x-2 mb-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#ff9000] animate-ping"></span>
+          <h3 class="text-xs font-extrabold uppercase text-[#ff9000]">Admin Quick Upload</h3>
+        </div>
+        <p class="text-xs text-gray-300 leading-relaxed mb-3">
+          Upload local videos, high-res photos, or paste external video URLs to publish directly to the visitor feed.
+        </p>
+        <button type="button" data-nav="admin" class="w-full bg-[#ff9000] hover:bg-[#ffa32a] text-black font-extrabold text-xs py-2 rounded transition">
+          Open Admin Studio
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN VIEWPORT AREA -->
+    <main class="flex-1 min-w-0">
+
+      <!-- ==========================================
+           VIEW 1: HOME FEED
+           ========================================== -->
+      <section id="view-home" class="space-y-6">
+        
+        <!-- Featured Hero Strip / Banner -->
+        <div class="bg-gradient-to-r from-[#1a1a1a] via-[#221c14] to-[#181818] border border-[#303030] rounded-lg p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center space-x-2">
+              <span class="bg-[#ff9000] text-black text-[10px] font-black uppercase px-2 py-0.5 rounded">Featured Stream</span>
+              <span id="activeFilterBadge" class="text-xs text-gray-400 font-mono">Showing: All Categories</span>
+            </div>
+            <h1 class="text-lg sm:text-2xl font-extrabold text-white tracking-tight">
+              Hot Fucking Streams & Featured Uploads
+            </h1>
+            <p class="text-xs sm:text-sm text-gray-400">
+              Filter by category, search by tag, or use the <button type="button" data-nav="admin" class="text-[#ff9000] underline font-semibold">Admin Studio</button> to add local media and external video links.
+            </p>
+          </div>
+
+          <!-- Sort & Source Filter Bar -->
+          <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
+            <select id="feedSortSelect" aria-label="Sort videos" class="bg-[#242424] text-white text-xs font-semibold px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]">
+              <option value="recommended">Sort: Featured & Hot</option>
+              <option value="views">Sort: Most Viewed</option>
+              <option value="rating">Sort: Highest Rated (%)</option>
+              <option value="newest">Sort: Newest Added</option>
+              <option value="external">Filter: External Links Only</option>
+              <option value="local">Filter: Direct Uploads Only</option>
+            </select>
+            <button id="resetFiltersBtn" type="button" class="bg-[#242424] hover:bg-[#333] text-gray-300 text-xs font-semibold px-3 py-2 rounded border border-[#3a3a3a] transition">
+              Reset Filters
+            </button>
+          </div>
+        </div>
+
+        <!-- Video Grid Header Count -->
+        <div class="flex items-center justify-between border-b border-[#262626] pb-2">
+          <div class="flex items-center space-x-2">
+            <span class="w-1.5 h-5 bg-[#ff9000] rounded-sm"></span>
+            <h2 id="feedHeadingText" class="text-base sm:text-lg font-extrabold uppercase tracking-wide text-white">
+              Recommended Videos
+            </h2>
+          </div>
+          <span id="feedResultCount" class="text-xs text-gray-400 font-mono">12 videos found</span>
+        </div>
+
+        <!-- VIDEO FEED GRID -->
+        <div id="videoGridContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+          <!-- Populated dynamically by JS -->
+        </div>
+
+        <!-- Home Photo Strip Preview -->
+        <div class="pt-4 border-t border-[#262626]">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+              <span class="w-1.5 h-5 bg-[#ff9000] rounded-sm"></span>
+              <h2 class="text-base sm:text-lg font-extrabold uppercase tracking-wide text-white">
+                Top Uploaded Photos & Gooning Snapshots
+              </h2>
+            </div>
+            <button type="button" data-nav="photos" class="text-xs font-bold text-[#ff9000] hover:underline">
+              Browse Full Photo Gallery →
+            </button>
+          </div>
+          <div id="homePhotoPreviewGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           VIEW 2: CATEGORIES DIRECTORY
+           ========================================== -->
+      <section id="view-categories" class="hidden space-y-6">
+        <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-xl sm:text-2xl font-extrabold text-white">Browse Categories</h1>
+            <p class="text-xs sm:text-sm text-gray-400 mt-1">
+              Click any category card below to filter the main video & photo feed, or create custom categories.
+            </p>
+          </div>
+          <form id="quickAddCategoryForm" class="flex items-center gap-2 w-full sm:w-auto">
+            <input
+              id="quickCategoryInput"
+              type="text"
+              placeholder="New category name..."
+              required
+              class="bg-[#242424] text-white text-xs sm:text-sm px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000] flex-1 sm:w-48"
+            />
+            <button type="submit" class="bg-[#ff9000] hover:bg-[#ffa32a] text-black font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded whitespace-nowrap">
+              + Add Category
+            </button>
+          </form>
+        </div>
+
+        <div id="categoriesGridContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ==========================================
+           VIEW 3: PHOTOS & GALLERY
+           ========================================== -->
+      <section id="view-photos" class="hidden space-y-6">
+        <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="bg-[#ff9000] text-black text-[10px] font-black uppercase px-2 py-0.5 rounded">High-Sex Gallery</span>
+              <span class="text-xs text-gray-400">Photos, Fetishes and Penetration Fun</span>
+            </div>
+            <h1 class="text-xl sm:text-2xl font-extrabold text-white mt-1">Uploaded Photos & Visual Feed</h1>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="photoCategoryFilter" aria-label="Filter photos by category" class="bg-[#242424] text-white text-xs font-semibold px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]">
+              <option value="all">All Photo Categories</option>
+            </select>
+            <button type="button" data-open-admin="photo" class="bg-[#ff9000] hover:bg-[#ffa32a] text-black font-extrabold text-xs px-3.5 py-2 rounded">
+              + Upload Photo
+            </button>
+          </div>
+        </div>
+
+        <div id="photosGridContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ==========================================
+           VIEW 4: CREATORS & CHANNELS
+           ========================================== -->
+      <section id="view-channels" class="hidden space-y-6">
+        <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-5">
+          <h1 class="text-xl sm:text-2xl font-extrabold text-white">Verified Creators & Pornstars</h1>
+          <p class="text-xs sm:text-sm text-gray-400 mt-1">
+            Click on any creator profile to filter the feed by their uploaded videos and external streams.
+          </p>
+        </div>
+
+        <div id="channelsGridContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ==========================================
+           VIEW 5: ADMIN UPLOAD & MANAGEMENT STUDIO
+           ========================================== -->
+      <section id="view-admin" class="hidden space-y-6">
+        <div class="bg-gradient-to-r from-[#1b1b1b] via-[#251d12] to-[#1b1b1b] border border-[#ff9000]/50 rounded-lg p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="bg-[#ff9000] text-black text-[10px] font-black uppercase px-2 py-0.5 rounded">Administrator Control Panel</span>
+              <span class="text-xs text-emerald-400 font-mono">● LocalStorage Persistence Active</span>
+            </div>
+            <h1 class="text-xl sm:text-2xl font-extrabold text-white mt-1">
+              Media Upload, External Video Linker & Site Customizer
+            </h1>
+            <p class="text-xs sm:text-sm text-gray-300 mt-0.5">
+              Upload local video files, add public video links from explicit websites with custom thumbnails and metadata, upload gallery photos, or customize categories.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <button id="exportDataBtn" type="button" class="bg-[#262626] hover:bg-[#333] text-gray-200 text-xs font-semibold px-3 py-2 rounded border border-[#3a3a3a]">
+              Export JSON
+            </button>
+            <button id="resetDemoDataBtn" type="button" class="bg-red-950/60 hover:bg-red-900/70 text-red-200 text-xs font-semibold px-3 py-2 rounded border border-red-800/60">
+              Reset Default Feed
+            </button>
+          </div>
+        </div>
+
+        <!-- Admin Sub-Navigation Tabs -->
+        <div class="flex flex-wrap gap-2 border-b border-[#2a2a2a] pb-3">
+          <button type="button" data-admin-tab="video" class="admin-subtab bg-[#ff9000] text-black font-extrabold text-xs sm:text-sm px-4 py-2 rounded transition">
+            1. Add Video / External Link
+          </button>
+          <button type="button" data-admin-tab="photo" class="admin-subtab bg-[#222] text-gray-300 hover:text-white font-bold text-xs sm:text-sm px-4 py-2 rounded transition">
+            2. Upload Photo to Gallery
+          </button>
+          <button type="button" data-admin-tab="manage" class="admin-subtab bg-[#222] text-gray-300 hover:text-white font-bold text-xs sm:text-sm px-4 py-2 rounded transition">
+            3. Manage Feed & Categories
+          </button>
+          <button type="button" data-admin-tab="branding" class="admin-subtab bg-[#222] text-gray-300 hover:text-white font-bold text-xs sm:text-sm px-4 py-2 rounded transition">
+            4. Customize Branding
+          </button>
+        </div>
+
+        <!-- ADMIN TAB 1: ADD VIDEO / EXTERNAL LINK -->
+        <div id="admin-panel-video" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <form id="adminVideoForm" class="lg:col-span-2 bg-[#181818] border border-[#2a2a2a] rounded-lg p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-[#282828] pb-3">
+              <h2 class="text-base font-extrabold text-white uppercase tracking-wide">Publish Video to Visitor Feed</h2>
+              <div class="flex items-center space-x-2 bg-[#111] p-1 rounded border border-[#2e2e2e]">
+                <button type="button" id="sourceTypeExternalBtn" class="bg-[#ff9000] text-black text-xs font-extrabold px-3 py-1 rounded">
+                  External Website Link
+                </button>
+                <button type="button" id="sourceTypeLocalBtn" class="text-gray-300 hover:text-white text-xs font-bold px-3 py-1 rounded">
+                  Local Video Upload
+                </button>
+              </div>
+            </div>
+
+            <input type="hidden" id="videoSourceType" value="external" />
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Video Title *</label>
+                <input
+                  id="vidTitleInput"
+                  type="text"
+                  required
+                  placeholder="e.g. Huge Ass Stepmom Kaden Kole Decides to have some fun..."
+                  class="w-full bg-[#242424] text-white text-sm px-3.5 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                />
+              </div>
+
+              <!-- External URL Input Box -->
+              <div id="externalUrlFieldGroup" class="sm:col-span-2 bg-[#141414] border border-[#333] rounded p-3.5 space-y-3">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div class="sm:col-span-2">
+                    <label class="block text-xs font-bold uppercase text-[#ff9000] mb-1">External Video URL (Direct MP4/WebM, Embed, or Public Page Link) *</label>
+                    <input
+                      id="vidExternalUrlInput"
+                      type="url"
+                      placeholder="https://pornhub.com/watch/xxx-123 or https://onlyfans.site.com/stream.mp4"
+                      class="w-full bg-[#222] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold uppercase text-gray-400 mb-1">Source Website Label</label>
+                    <input
+                      id="vidSourceSiteInput"
+                      type="text"
+                      placeholder="e.g. XHamster / YouPorn / PussySpace"
+                      value="External Partner"
+                      class="w-full bg-[#222] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                    />
+                  </div>
+                </div>
+                <p class="text-[11px] text-gray-400">
+                  Tip: Visitors can watch embedded streams inside the built-in modal player or click the external source badge to open the original video URL.
+                </p>
+              </div>
+
+              <!-- Local Video File Input Box -->
+              <div id="localFileFieldGroup" class="hidden sm:col-span-2 bg-[#141414] border border-[#333] rounded p-3.5">
+                <label class="block text-xs font-bold uppercase text-[#ff9000] mb-1">Select Video File from Device (.mp4, .webm, .ogg)</label>
+                <input
+                  id="vidLocalFileInput"
+                  type="file"
+                  accept="video/*"
+                  class="w-full text-xs text-gray-300 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-extrabold file:bg-[#ff9000] file:text-black hover:file:bg-[#ffa32a]"
+                />
+                <p class="text-[11px] text-gray-400 mt-1.5">
+                  Uploaded video files are bound via object URLs for instant playback in the visitor video player.
+                </p>
+              </div>
+
+              <!-- Thumbnail URL or Upload -->
+              <div>
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Thumbnail Image URL (Optional)</label>
+                <input
+                  id="vidThumbUrlInput"
+                  type="url"
+                  placeholder="https://... (Leave blank for auto-generated HD thumb)"
+                  class="w-full bg-[#242424] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                />
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Or Upload Custom Thumbnail Image</label>
+                <input
+                  id="vidThumbFileInput"
+                  type="file"
+                  accept="image/*"
+                  class="w-full text-xs text-gray-300 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-bold file:bg-[#333] file:text-white hover:file:bg-[#444]"
+                />
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Pornstar(s) / Channel Name *</label>
+                <input
+                  id="vidCreatorInput"
+                  type="text"
+                  required
+                  value="FullStackAfterDark"
+                  class="w-full bg-[#242424] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                />
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Category *</label>
+                <select
+                  id="vidCategoryInput"
+                  class="w-full bg-[#242424] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                >
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Duration (MM:SS) *</label>
+                <input
+                  id="vidDurationInput"
+                  type="text"
+                  required
+                  value="18:45"
+                  placeholder="24:10"
+                  class="w-full bg-[#242424] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                />
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Quality Badge & Initial Rating</label>
+                <div class="grid grid-cols-2 gap-2">
+                  <select id="vidQualityInput" class="bg-[#242424] text-white text-sm px-2.5 py-2 rounded border border-[#3a3a3a]">
+                    <option value="4K">4K 60FPS</option>
+                    <option value="HD" selected>1080p HD</option>
+                    <option value="RAW">RAW UNCUT</option>
+                  </select>
+                  <input
+                    id="vidRatingInput"
+                    type="number"
+                    min="50"
+                    max="100"
+                    value="97"
+                    placeholder="Rating %"
+                    class="bg-[#242424] text-white text-sm px-2.5 py-2 rounded border border-[#3a3a3a]"
+                  />
+                </div>
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Search Tags (comma-separated)</label>
+                <input
+                  id="vidTagsInput"
+                  type="text"
+                  value="mommy, lesbian, amateur, redhead"
+                  placeholder="e.g. amateur, speedrun, backend, system-design"
+                  class="w-full bg-[#242424] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                />
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Video Description / Notes</label>
+                <textarea
+                  id="vidDescInput"
+                  rows="2"
+                  placeholder="Detailed summary shown inside the video player modal..."
+                  class="w-full bg-[#242424] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                >Complete deep-dive gooning with live sexy girl benchmarks, zero edits, and full source links.</textarea>
+              </div>
+            </div>
+
+            <div class="pt-2 flex items-center justify-end gap-3">
+              <button
+                type="submit"
+                class="bg-[#ff9000] hover:bg-[#ffa32a] text-black font-black text-sm px-6 py-2.5 rounded shadow-md transition"
+              >
+                Publish Video to Feed
+              </button>
+            </div>
+          </form>
+
+          <!-- Live Admin Preview Card -->
+          <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-5 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#ff9000] mb-3">
+                Live Feed Card Preview
+              </h3>
+              <div id="adminLivePreviewCard" class="bg-[#141414] border border-[#2e2e2e] rounded overflow-hidden">
+                <!-- Populated dynamically as admin types -->
+              </div>
+            </div>
+            <div class="mt-4 bg-[#121212] border border-[#262626] rounded p-3 text-xs text-gray-400 space-y-1">
+              <p class="text-white font-semibold">How External Video Links Work:</p>
+              <p>1. Paste any public video URL or direct stream URL.</p>
+              <p>2. Provide a custom thumbnail URL, upload a cover image, or let the studio generate an SVG banner.</p>
+              <p>3. Visitors see the card immediately on the Home & Category feeds.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADMIN TAB 2: UPLOAD PHOTO -->
+        <div id="admin-panel-photo" class="hidden bg-[#181818] border border-[#2a2a2a] rounded-lg p-5 max-w-3xl">
+          <h2 class="text-base font-extrabold text-white uppercase tracking-wide border-b border-[#282828] pb-3 mb-4">
+            Upload Photo / Visual Asset to Gallery
+          </h2>
+          <form id="adminPhotoForm" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Photo Title / Caption *</label>
+                <input
+                  id="photoTitleInput"
+                  type="text"
+                  required
+                  placeholder="e.g. Triple-Monitor Custom Watercooled Linux Battlestation"
+                  class="w-full bg-[#242424] text-white text-sm px-3.5 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                />
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase text-[#ff9000] mb-1">Upload Photo File (.jpg, .png, .webp)</label>
+                <input
+                  id="photoFileInput"
+                  type="file"
+                  accept="image/*"
+                  class="w-full text-xs text-gray-300 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-extrabold file:bg-[#ff9000] file:text-black"
+                />
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Or Paste External Image URL</label>
+                <input
+                  id="photoUrlInput"
+                  type="url"
+                  placeholder="https://fuck.com/photo.jpg"
+                  class="w-full bg-[#242424] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                />
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Category *</label>
+                <select
+                  id="photoCategoryInput"
+                  class="w-full bg-[#242424] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                ></select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Pornstar / Creator</label>
+                <input
+                  id="photoCreatorInput"
+                  type="text"
+                  value="RigMaster4K"
+                  class="w-full bg-[#242424] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"
+                />
+              </div>
+            </div>
+
+            <div class="pt-2 flex justify-end">
+              <button type="submit" class="bg-[#ff9000] hover:bg-[#ffa32a] text-black font-black text-sm px-6 py-2.5 rounded">
+                Publish Photo to Gallery
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- ADMIN TAB 3: MANAGE CONTENT & CATEGORIES -->
+        <div id="admin-panel-manage" class="hidden space-y-6">
+          <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-5">
+            <h3 class="text-sm font-extrabold uppercase text-[#ff9000] mb-3">Manage Filter Categories</h3>
+            <p class="text-xs text-gray-400 mb-3">
+              Add custom categories to match your niche or remove existing category tags.
+            </p>
+            <div id="adminCategoryManagerList" class="flex flex-wrap gap-2">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-5 overflow-x-auto">
+            <h3 class="text-sm font-extrabold uppercase text-white mb-3">Published Videos (<span id="adminTableCount">0</span>)</h3>
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="border-b border-[#2e2e2e] text-gray-400 uppercase text-[11px]">
+                  <th class="py-2 px-2">Title</th>
+                  <th class="py-2 px-2">Category</th>
+                  <th class="py-2 px-2">Source</th>
+                  <th class="py-2 px-2">Views</th>
+                  <th class="py-2 px-2">Rating</th>
+                  <th class="py-2 px-2 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminVideoTableBody" class="divide-y divide-[#262626]">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ADMIN TAB 4: CUSTOMIZE BRANDING -->
+        <div id="admin-panel-branding" class="hidden bg-[#181818] border border-[#2a2a2a] rounded-lg p-5 max-w-xl space-y-4">
+          <h3 class="text-base font-extrabold text-white uppercase">Customize Site Logo & Header</h3>
+          <p class="text-xs text-gray-400">
+            Change the white prefix text and the orange pill badge text in the top-left header logo.
+          </p>
+          <form id="brandingForm" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Logo White Text</label>
+                <input id="brandPrefixInput" type="text" value="Corn" required class="w-full bg-[#242424] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a]" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase text-[#ff9000] mb-1">Logo Orange Pill Text</label>
+                <input id="brandSuffixInput" type="text" value="Hub" required class="w-full bg-[#242424] text-white text-sm px-3 py-2 rounded border border-[#3a3a3a]" />
+              </div>
+            </div>
+            <button type="submit" class="bg-[#ff9000] hover:bg-[#ffa32a] text-black font-black text-xs sm:text-sm px-5 py-2.5 rounded">
+              Save Logo Branding
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           VIEW 6: CONTACT & SUPPORT SECTION
+           ========================================== -->
+      <section id="view-contact" class="hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-[#181818] border border-[#2a2a2a] rounded-lg p-6">
+            <div class="flex items-center space-x-2 mb-1">
+              <span class="bg-[#ff9000] text-black text-[10px] font-black uppercase px-2 py-0.5 rounded">24/7 Support Desk</span>
+              <span class="text-xs text-gray-400">Creator & Visitor Inquiries</span>
+            </div>
+            <h1 class="text-xl sm:text-2xl font-extrabold text-white mb-2">Contact Us & Content Submissions</h1>
+            <p class="text-xs sm:text-sm text-gray-400 mb-5">
+              Have questions about hosting, partner link indexing, copyright takedowns, or advertising? Submit a ticket below.
+            </p>
+
+            <form id="contactForm" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Your Name *</label>
+                  <input id="contactName" type="text" required placeholder="Alex Mercer" class="w-full bg-[#242424] text-white text-sm px-3.5 py-2.5 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Email Address *</label>
+                  <input id="contactEmail" type="email" required placeholder="alex@domain.com" class="w-full bg-[#242424] text-white text-sm px-3.5 py-2.5 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Department</label>
+                  <select id="contactDept" class="w-full bg-[#242424] text-white text-sm px-3.5 py-2.5 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]">
+                    <option value="Partner Feed / External Link Indexing">Partner Feed / External Link Indexing</option>
+                    <option value="Creator Verification">Creator Verification</option>
+                    <option value="Technical / Playback Support">Technical / Playback Support</option>
+                    <option value="Copyright / Content Removal Request">Copyright / Content Removal Request</option>
+                    <option value="Advertising & Sponsorships">Advertising & Sponsorships</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Reference URL (Optional)</label>
+                  <input id="contactRefUrl" type="url" placeholder="https://..." class="w-full bg-[#242424] text-white text-sm px-3.5 py-2.5 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Message *</label>
+                <textarea id="contactMessage" rows="4" required placeholder="Describe your request in detail..." class="w-full bg-[#242424] text-white text-sm px-3.5 py-2.5 rounded border border-[#3a3a3a] focus:outline-none focus:border-[#ff9000]"></textarea>
+              </div>
+
+              <button type="submit" class="bg-[#ff9000] hover:bg-[#ffa32a] text-black font-black text-sm px-6 py-2.5 rounded transition">
+                Send Support Ticket
+              </button>
+            </form>
+          </div>
+
+          <!-- Right Column: Support Tickets & Info -->
+          <div class="space-y-4">
+            <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-5 space-y-3">
+              <h2 class="text-sm font-extrabold uppercase text-[#ff9000]">Platform Guidelines & FAQ</h2>
+              <div class="space-y-2 text-xs text-gray-300 leading-relaxed">
+                <p><strong class="text-white">External Video Links:</strong> Admins can index any public video URL via the Admin Studio. External videos display source badges and launch inside the theater modal.</p>
+                <p><strong class="text-white">Responsive Design:</strong> Optimized for mobile phones (360px+), tablets, laptops, and ultrawide 4K monitors.</p>
+                <p><strong class="text-white">Gooning Ready:</strong> Pre-configured with ejaculation friendly and thrust ease for gooners.</p>
+              </div>
+            </div>
+
+            <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-5">
+              <h3 class="text-xs font-extrabold uppercase text-gray-300 mb-3">Recent Submitted Tickets</h3>
+              <div id="submittedTicketsList" class="space-y-2 text-xs text-gray-400">
+                <p class="italic text-gray-500">No tickets submitted in this session yet.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ==========================================
+       VIDEO PLAYER THEATER MODAL
+       ========================================== -->
+  <div id="videoModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-sm overflow-y-auto p-2 sm:p-6">
+    <div class="max-w-6xl mx-auto bg-[#161616] border border-[#2e2e2e] rounded-lg overflow-hidden shadow-2xl my-4">
+      <!-- Top Bar -->
+      <div class="bg-[#111] px-4 py-3 border-b border-[#282828] flex items-center justify-between gap-4">
+        <div class="flex items-center space-x-2 truncate">
+          <span id="modalQualityBadge" class="bg-[#ff9000] text-black text-[10px] font-black px-2 py-0.5 rounded">4K</span>
+          <h2 id="modalVideoTitle" class="text-sm sm:text-base font-extrabold text-white truncate">Video Title</h2>
+        </div>
+        <button id="closeVideoModalBtn" type="button" class="bg-[#262626] hover:bg-[#ff9000] hover:text-black text-gray-300 text-xs font-extrabold px-3 py-1.5 rounded transition shrink-0">
+          ✕ Close Player
+        </button>
+      </div>
+
+      <!-- Player Area -->
+      <div class="grid grid-cols-1 lg:grid-cols-3">
+        <div class="lg:col-span-2 bg-black flex flex-col">
+          <!-- Interactive Video / Canvas Stage -->
+          <div class="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden">
+            <video id="modalHtml5Video" class="hidden w-full h-full object-contain" controls playsinline></video>
+            <canvas id="modalSimCanvas" width="960" height="540" class="w-full h-full object-cover"></canvas>
+
+            <!-- Custom Overlay Controls for Simulated / External Stream -->
+            <div id="modalSimControls" class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-3 sm:p-4 flex flex-col gap-2">
+              <div class="w-full bg-[#333] h-1.5 rounded-full overflow-hidden cursor-pointer" id="simProgressTrack">
+                <div id="simProgressBar" class="bg-[#ff9000] h-full w-1/3 transition-all"></div>
+              </div>
+              <div class="flex items-center justify-between text-xs text-white">
+                <div class="flex items-center space-x-3">
+                  <button id="simPlayPauseBtn" type="button" class="bg-[#ff9000] text-black font-black px-3 py-1 rounded text-xs">
+                    ❚❚ Pause
+                  </button>
+                  <span id="simTimecode" class="font-mono text-gray-300">04:12 / 18:45</span>
+                  <span id="modalSourceBadge" class="bg-[#222] border border-[#444] text-[#ff9000] px-2 py-0.5 rounded text-[11px]">
+                    Internal 4K Stream
+                  </span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <a id="modalExternalLinkBtn" href="https://example.com" target="_blank" rel="noopener noreferrer" class="hidden bg-[#ff9000] hover:bg-[#ffa32a] text-black font-extrabold px-3 py-1 rounded text-xs">
+                    Open External Video ↗
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Info & Rating Controls -->
+          <div class="p-4 sm:p-5 space-y-4 border-t border-[#262626]">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-[#ff9000] text-black font-black flex items-center justify-center text-sm" id="modalCreatorAvatar">
+                  FS
+                </div>
+                <div>
+                  <div class="flex items-center space-x-1.5">
+                    <span id="modalCreatorName" class="font-bold text-white text-sm">Creator</span>
+                    <span class="text-[#ff9000] text-xs" title="Verified Creator">✔</span>
+                  </div>
+                  <span id="modalViewsText" class="text-xs text-gray-400">1.2M views • 98% rating</span>
+                </div>
+              </div>
+
+              <div class="flex items-center space-x-2">
+                <button id="modalLikeBtn" type="button" class="bg-[#242424] hover:bg-[#333] border border-[#3a3a3a] text-emerald-400 text-xs font-bold px-3.5 py-2 rounded flex items-center space-x-1.5">
+                  <span>👍 Like</span>
+                  <span id="modalLikePct">98%</span>
+                </button>
+                <button id="modalCopyLinkBtn" type="button" class="bg-[#242424] hover:bg-[#333] border border-[#3a3a3a] text-gray-200 text-xs font-bold px-3.5 py-2 rounded">
+                  Share / Copy Link
+                </button>
+              </div>
+            </div>
+
+            <p id="modalDescription" class="text-xs sm:text-sm text-gray-300 leading-relaxed bg-[#121212] p-3 rounded border border-[#242424]"></p>
+            <div id="modalTagContainer" class="flex flex-wrap gap-1.5"></div>
+          </div>
+        </div>
+
+        <!-- Right Column: Comments & Related -->
+        <div class="bg-[#141414] border-t lg:border-t-0 lg:border-l border-[#282828] p-4 flex flex-col justify-between max-h-[600px] overflow-y-auto">
+          <div class="space-y-4">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#ff9000]">Viewer Comments</h3>
+            <form id="modalCommentForm" class="flex gap-2">
+              <input id="modalCommentInput" type="text" required placeholder="Add a public comment..." class="flex-1 bg-[#222] text-white text-xs px-3 py-2 rounded border border-[#383838] focus:outline-none focus:border-[#ff9000]" />
+              <button type="submit" class="bg-[#ff9000] text-black font-extrabold text-xs px-3 py-2 rounded">Post</button>
+            </form>
+            <div id="modalCommentsList" class="space-y-2.5 text-xs"></div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-[#262626]">
+            <h4 class="text-xs font-extrabold uppercase text-gray-400 mb-2">Up Next in Category</h4>
+            <div id="modalRelatedList" class="space-y-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       PHOTO LIGHTBOX MODAL
+       ========================================== -->
+  <div id="photoModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="max-w-3xl w-full bg-[#181818] border border-[#333] rounded-lg overflow-hidden shadow-2xl">
+      <div class="bg-[#111] px-4 py-3 border-b border-[#282828] flex items-center justify-between">
+        <h3 id="photoModalTitle" class="text-sm sm:text-base font-extrabold text-white truncate">Photo Preview</h3>
+        <button id="closePhotoModalBtn" type="button" class="bg-[#262626] hover:bg-[#ff9000] hover:text-black text-gray-300 text-xs font-bold px-3 py-1 rounded">
+          ✕ Close
+        </button>
+      </div>
+      <div id="photoModalBody" class="p-4 bg-black flex items-center justify-center max-h-[70vh] overflow-hidden"></div>
+      <div class="p-4 flex items-center justify-between text-xs text-gray-400 border-t border-[#282828]">
+        <span id="photoModalMeta">Uploaded by Creator</span>
+        <span class="text-[#ff9000] font-bold">Full Resolution Preview</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastNotification" class="fixed bottom-5 right-5 z-50 hidden bg-[#1b1b1b] border-l-4 border-[#ff9000] text-white px-4 py-3 rounded shadow-2xl text-xs sm:text-sm font-semibold flex items-center space-x-2.5">
+    <span class="text-[#ff9000] font-black">✓</span>
+    <span id="toastMessageText">Action completed!</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#0a0a0a] border-t border-[#222] mt-12 py-8 px-4 sm:px-6 text-xs text-gray-500">
+    <div class="max-w-[1600px] mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 mb-6">
+      <div>
+        <div class="flex items-center text-xl font-black mb-2">
+          <span class="text-white">Corn</span><span class="hub-logo-pill text-sm">Hub</span>
+        </div>
+        <p class="text-gray-500 leading-relaxed">
+          CornHub provides you with unlimited free porn videos with the hottest pornstars. Enjoy the largest amateur porn community on the net as well as full-length cenes from the top XXX studios. We update our porn videos daily to ensure you always get the best quality sex movies.
+        </p>
+      </div>
+      <div>
+        <h4 class="text-white font-bold uppercase mb-2">Navigation</h4>
+        <ul class="space-y-1.5">
+          <li><button type="button" data-nav="home" class="hover:text-[#ff9000]">Home Video Feed</button></li>
+          <li><button type="button" data-nav="categories" class="hover:text-[#ff9000]">All Categories</button></li>
+          <li><button type="button" data-nav="photos" class="hover:text-[#ff9000]">Photo Gallery</button></li>
+          <li><button type="button" data-nav="channels" class="hover:text-[#ff9000]">Verified Creators</button></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-bold uppercase mb-2">Admin & Content</h4>
+        <ul class="space-y-1.5">
+          <li><button type="button" data-open-admin="video" class="hover:text-[#ff9000]">Upload Video / External URL</button></li>
+          <li><button type="button" data-open-admin="photo" class="hover:text-[#ff9000]">Upload High-Res Photo</button></li>
+          <li><button type="button" data-nav="admin" class="hover:text-[#ff9000]">Manage Categories</button></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-bold uppercase mb-2">Legal & Support</h4>
+        <ul class="space-y-1.5">
+          <li><button type="button" data-nav="contact" class="hover:text-[#ff9000]">Contact & Support</button></li>
+          <li><button type="button" data-nav="contact" class="hover:text-[#ff9000]">Content Takedown / DMCA</button></li>
+          <li><span class="text-gray-600">Goon Edge Ready Build</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="max-w-[1600px] mx-auto border-t border-[#1c1c1c] pt-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <span>© 2026 CornHub Media Portal. All rights reserved.</span>
+      <span class="text-gray-400">Responsive across Mobile, Tablet, Laptop & 4K Desktop</span>
+    </div>
+  </footer>
+
+  <!-- APPLICATION LOGIC -->
+  <script>
+    (function () {
+      const STORAGE_KEY = 'codehub_portal_state_v1';
+
+      const DEFAULT_CATEGORIES = [
+        'Lesbian',
+        'MILF',
+        'Anal',
+        'Threesome',
+        'Mature',
+        'Hentai',
+        'Amateur / Indie',
+        'Ebony',
+        'Japanese',
+        'Fetish Queen',
+        'Cunt Wizardry',
+        'Sexy Boobies'
+      ];
+
+      const DEFAULT_VIDEOS = [
+        {
+          id: 'vid-1',
+          title: 'Her Cervix Felt This',
+          creator: 'Pumpit',
+          category: 'Anal',
+          duration: '44:18',
+          quality: '4K',
+          views: 1840200,
+          rating: 99,
+          dateLabel: '2 hours ago',
+          sourceType: 'local',
+          sourceSite: 'CornHub Originals',
+          externalUrl: '',
+          videoDataUrl: '',
+          thumbUrl: '',
+          accent: '#ff9000',
+          codeSnippet: 'FUCKMYASS',
+          tags: ['love', 'meet-and-fuck', 'ass-licking', 'big-tits'],
+          description: 'Complete unedited session of rough penetration in her vagina leading to ejaculation and fusion of the white liquid with her sticky ass.'
+        },
+        {
+          id: 'vid-2',
+          title: 'Help mommy to do some sport',
+          creator: 'Mom and Son',
+          category: 'Incest',
+          duration: '19:05',
+          quality: 'HD',
+          views: 2410900,
+          rating: 97,
+          dateLabel: '5 hours ago',
+          sourceType: 'external',
+          sourceSite: 'FuckStream.tv',
+          externalUrl: 'https://supeporn.nut.org/',
+          videoDataUrl: '',
+          thumbUrl: '',
+          accent: '#f97316',
+          codeSnippet: 'FUCKMYASS',
+          tags: ['amateur', 'incest', 'boobs', 'live'],
+          description: 'Believe it or not, the stunning woman who stars in this free porn video is a 35-year-old milf named Melissa Stratton. What is her secret to stay so spectacular? Very simple: yoga and sport. That and a full sex life. As her husband is not at home today, she asks her stepson to help her do her exercises. But this is porn, so you know what kind of sport they are playing.'
+        },
+        {
+          id: 'vid-3',
+          title: 'Redhead mommy inseminated by her stepson\'s huge dick',
+          creator: 'fresxxximooye',
+          category: 'Red-head',
+          duration: '28:50',
+          quality: '4K',
+          views: 980400,
+          rating: 96,
+          dateLabel: '1 day ago',
+          sourceType: 'local',
+          sourceSite: 'CornHub Originals',
+          externalUrl: '',
+          videoDataUrl: '',
+          thumbUrl: '',
+          accent: '#38bdf8',
+          codeSnippet: 'FUCKMYASS',
+          tags: ['red-head', 'anal', 'reverse-cowgirl', '4k'],
+          description: 'Once again, our good friend Juan, puts his big fat cock at the service of a new stepmother. In this case it is an attractive 39 year old milf named Sophia Locke. A woman who is desperate to feel the cock of a man much younger than her inside her. She gets a lot of excitement knowing that her stepson is fulfilling his role, but the climax of this hot fuck comes when John pours inside Sophia\'s pussy all of his sticky, valuable male goo. Every mother\'s favorite creampie.'
+        },
+        {
+          id: 'vid-4',
+          title: 'Girlfriend and mommy enjoy my cock',
+          creator: 'PussyArchitect',
+          category: 'Pussy Design',
+          duration: '36:12',
+          quality: '4K',
+          views: 1520000,
+          rating: 99,
+          dateLabel: '2 days ago',
+          sourceType: 'external',
+          sourceSite: 'PussyDesignHub',
+          externalUrl: 'https://porn.dev/',
+          videoDataUrl: '',
+          thumbUrl: '',
+          accent: '#a855f7',
+          codeSnippet: 'FUCKMYASS',
+          tags: ['threesome', 'cum', 'streaming', 'anal'],
+          description: 'Today was an important day for me. Today was the day my girlfriend and stepmom were going to meet. I was nervous because my girlfriend Madi Collins didn\'t know that my stepmom and I fuck from time to time. But as soon as Mommy (Sophia Locke) explained it to her and showed her naturally, my girl\'s reaction couldn\'t have been better. She got horny watching my stepmom suck my cock and wanted to be part of an ffm threesome that none of us will ever forget.'
+        },
+        {
+          id: 'vid-5',
+          title: 'Mommy, I\'m going to impregnate you',
+          creator: 'xxx54freemoyie',
+          category: 'Anal',
+          duration: '22:40',
+          quality: '4K',
+          views: 1190300,
+          rating: 98,
+          dateLabel: '3 days ago',
+          sourceType: 'local',
+          sourceSite: 'CornHub Originals',
+          externalUrl: '',
+          videoDataUrl: '',
+          thumbUrl: '',
+          accent: '#10b981',
+          codeSnippet: 'FUCKMYASS',
+          tags: ['anal', 'sex', 'redhead', 'twosome'],
+          description: 'Annie King is an attractive stepmother who like many, has serious problems relating to her new stepson. However, in this free porn video, you can all witness the ideal method they both devise to bond. It\'s healthy and has hardly any side effects? Maybe only one: unwanted pregnancy.'
+        },
+        {
+          id: 'vid-6',
+          title: 'Mommies\' pussies are ready',
+          creator: 'CuntUncut',
+          category: 'Anal',
+          duration: '31:15',
+          quality: 'HD',
+          views: 740800,
+          rating: 95,
+          dateLabel: '4 days ago',
+          sourceType: 'external',
+          sourceSite: 'WinerCasts',
+          externalUrl: 'https://pussy.io/',
+          videoDataUrl: '',
+          thumbUrl: '',
+          accent: '#eab308',
+          codeSnippet: 'FUCKMYASS',
+          tags: ['anal', 'brunette', 'threesome', 'uncut'],
+          description: 'Moms Crystal Clark and Isabel Love return from shopping to find their stepkids hanging out on the couch. They\'ve seen a lot of free porn and know that the stepmother-stepchild taboo is a very normal thing in this day and age. Since they see that they are unproductive boys and have no solution, maybe at least they can get some good use out of their cocks...'
+        },
+        {
+          id: 'vid-7',
+          title: 'What I had in my balls is now inside mommy',
+          creator: 'CumSorceress',
+          category: 'Cum Wizardry',
+          duration: '15:33',
+          quality: '4K',
+          views: 890100,
+          rating: 97,
+          dateLabel: '5 days ago',
+          sourceType: 'local',
+          sourceSite: 'CornHub Originals',
+          externalUrl: '',
+          videoDataUrl: '',
+          thumbUrl: '',
+          accent: '#ec4899',
+          codeSnippet: 'FUCKMYASS',
+          tags: ['redhead', 'brunette', 'amateur', 'cum'],
+          description: 'Bunny Madison is a young stepmom who loves to fuck her stepson Parker Ambrose. What a novelty for a story in porn, right? Anyway, remember that this kind of taboo family fantasies only happen in this particular world. How do you think this sexual encounter will end? Yes, indeed, with the stepson emptying the inside of his balls into his stepmother\'s pussy.'
+        },
+        {
+          id: 'vid-8',
+          title: 'Mommy delivers what she promises',
+          creator: 'FuckAfterDark',
+          category: 'Full-Fuck',
+          duration: '52:09',
+          quality: '4K',
+          views: 1630500,
+          rating: 98,
+          dateLabel: '1 week ago',
+          sourceType: 'external',
+          sourceSite: 'FullSexTV',
+          externalUrl: 'https://cumjohn.com/',
+          videoDataUrl: '',
+          thumbUrl: '',
+          accent: '#ff9000',
+          codeSnippet: 'FUCKMYASS',
+          tags: ['brunette', 'amateur', 'mommy', '4K'],
+          description: 'Beverly Hillson arrives home exhausted from a 12-hour hospital shift to find her stepson sprawled on the couch. She asks him nicely to please pick up the table he\'s been eating on. He tells her he will, but she knows he\'s lazy and doesn\'t believe him. So Beverly leaves with a very interesting phrase \“if you clean up, I\'ll empty your balls\”. When she returns to the living room, she discovers that those had always been the magic words to get whatever she wanted from her stepson.'
+        }
+      ];
+
+      const DEFAULT_PHOTOS = [
+        {
+          id: 'pho-1',
+          title: 'Learning safe sex with my stepmom',
+          creator: 'RigMaster4K',
+          category: 'Sex Rigs',
+          views: '412K views',
+          rating: '99%',
+          imageUrl: '',
+          accent: '#ff9000',
+          diagramText: 'PORN'
+        },
+        {
+          id: 'pho-2',
+          title: 'Mom is demanding but she sucks my cock',
+          creator: 'SexArchitect',
+          category: 'Sex Design',
+          views: '318K views',
+          rating: '98%',
+          imageUrl: '',
+          accent: '#38bdf8',
+          diagramText: 'PORN'
+        },
+        {
+          id: 'pho-3',
+          title: 'Perfect vision of my mommy',
+          creator: 'Gobble_Siren',
+          category: 'Sex Tuning',
+          views: '289K views',
+          rating: '97%',
+          imageUrl: '',
+          accent: '#10b981',
+          diagramText: 'PORN'
+        },
+        {
+          id: 'pho-4',
+          title: 'Asian mommy gets manhood from stepson',
+          creator: 'SexAfterDark',
+          category: 'Sex Systems',
+          views: '520K views',
+          rating: '99%',
+          imageUrl: '',
+          accent: '#f97316',
+          diagramText: 'PORN'
+        },
+        {
+          id: 'pho-5',
+          title: 'Asian mommy gets manhood from stepson',
+          creator: 'SexAfterDark',
+          category: 'Sex Systems',
+          views: '195K views',
+          rating: '96%',
+          imageUrl: '',
+          accent: '#a855f7',
+          diagramText: 'PORN'
+        },
+        {
+          id: 'pho-6',
+          title: 'Asian mommy gets manhood from stepson',
+          creator: 'SexAfterDark',
+          category: 'Sex Systems',
+          views: '264K views',
+          rating: '98%',
+          imageUrl: '',
+          accent: '#eab308',
+          diagramText: 'PORN'
+        }
+      ];
+
+      let state = {
+        brandPrefix: 'Corn',
+        brandSuffix: 'Hub',
+        activeView: 'home',
+        activeCategory: 'all',
+        activeSort: 'recommended',
+        searchQuery: '',
+        categories: [...DEFAULT_CATEGORIES],
+        videos: [...DEFAULT_VIDEOS],
+        photos: [...DEFAULT_PHOTOS],
+        comments: {
+          'vid-1': [
+            { user: 'AsyncRustacean', text: 'That zero-copy buffer pool refactor at 14:20 was pure gooning art.', time: '1h ago' },
+            { user: 'NodeSurvivor', text: 'Finally an uncut fucking video that shows the real pussy errors!', time: '45m ago' }
+          ]
+        },
+        tickets: []
+      };
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && Array.isArray(parsed.videos) && Array.isArray(parsed.categories)) {
+              state = Object.assign({}, state, parsed);
+            }
+          }
+        } catch (err) {
+          // Ignore storage errors in sandboxed iframes
+        }
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (err) {
+          // Ignore storage errors
+        }
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById('toastNotification');
+        const text = document.getElementById('toastMessageText');
+        if (!toast || !text) return;
+        text.textContent = msg;
+        toast.classList.remove('hidden');
+        clearTimeout(window.__toastTimer);
+        window.__toastTimer = setTimeout(() => {
+          toast.classList.add('hidden');
+        }, 3200);
+      }
+
+      function formatViews(num) {
+        const n = Number(num) || 0;
+        if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M views';
+        if (n >= 1000) return Math.round(n / 1000) + 'K views';
+        return n + ' views';
+      }
+
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function buildSvgThumbnail(video) {
+        if (video.thumbUrl && video.thumbUrl.trim() !== '') {
+          return video.thumbUrl;
+        }
+        const accent = video.accent || '#ff9000';
+        const cat = escapeHtml(video.category || 'CodeHub');
+        const snippetLines = String(video.codeSnippet || 'const stream = await Edge.connect(4096);').split('\n');
+        const line1 = escapeHtml(snippetLines[0] || '');
+        const line2 = escapeHtml(snippetLines[1] || '');
+        const line3 = escapeHtml(snippetLines[2] || '');
+
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0d0d0d"/>
+              <stop offset="55%" stop-color="#181818"/>
+              <stop offset="100%" stop-color="#22170a"/>
+            </linearGradient>
+          </defs>
+          <rect width="640" height="360" fill="url(#bg)"/>
+          <rect x="24" y="24" width="592" height="312" rx="10" fill="#111111" stroke="#2e2e2e" stroke-width="2"/>
+          <circle cx="48" cy="48" r="6" fill="#ef4444"/>
+          <circle cx="68" cy="48" r="6" fill="#f59e0b"/>
+          <circle cx="88" cy="48" r="6" fill="#10b981"/>
+          <rect x="440" y="34" width="156" height="26" rx="4" fill="${accent}"/>
+          <text x="518" y="52" text-anchor="middle" fill="#000000" font-family="Inter, sans-serif" font-weight="900" font-size="13">${cat.toUpperCase()}</text>
+          <line x1="24" y1="70" x2="616" y2="70" stroke="#262626" stroke-width="2"/>
+          <text x="48" y="125" fill="${accent}" font-family="monospace" font-weight="700" font-size="19">${line1}</text>
+          <text x="48" y="165" fill="#e5e7eb" font-family="monospace" font-size="17">${line2}</text>
+          <text x="48" y="205" fill="#9ca3af" font-family="monospace" font-size="16">${line3}</text>
+          <circle cx="320" cy="265" r="32" fill="#000000" fill-opacity="0.75" stroke="${accent}" stroke-width="3"/>
+          <polygon points="312,249 312,281 338,265" fill="${accent}"/>
+        </svg>`;
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+      }
+
+      function buildPhotoSvg(photo) {
+        if (photo.imageUrl && photo.imageUrl.trim() !== '') {
+          return photo.imageUrl;
+        }
+        const accent = photo.accent || '#ff9000';
+        const title = escapeHtml(photo.title || 'Visual Shot');
+        const diag = escapeHtml(photo.diagramText || '4K Ultra-HD Snapshot');
+        const cat = escapeHtml(photo.category || 'Gallery');
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420">
+          <rect width="600" height="420" fill="#101010"/>
+          <rect x="20" y="20" width="560" height="380" rx="12" fill="#171717" stroke="${accent}" stroke-opacity="0.5" stroke-width="2"/>
+          <rect x="40" y="42" width="140" height="28" rx="4" fill="${accent}"/>
+          <text x="110" y="61" text-anchor="middle" fill="#000" font-family="Inter, sans-serif" font-weight="900" font-size="13">${cat.toUpperCase()}</text>
+          <rect x="40" y="100" width="520" height="190" rx="8" fill="#0c0c0c" stroke="#2c2c2c"/>
+          <text x="300" y="195" text-anchor="middle" fill="${accent}" font-family="monospace" font-weight="700" font-size="18">${diag}</text>
+          <text x="40" y="340" fill="#ffffff" font-family="Inter, sans-serif" font-weight="800" font-size="17">${title.slice(0, 46)}</text>
+        </svg>`;
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+      }
+
+      // Render Header & Category Controls
+      function renderBrandingAndCounts() {
+        document.getElementById('brandPrefixText').textContent = state.brandPrefix;
+        document.getElementById('brandSuffixText').textContent = state.brandSuffix;
+        document.getElementById('brandPrefixInput').value = state.brandPrefix;
+        document.getElementById('brandSuffixInput').value = state.brandSuffix;
+
+        document.getElementById('headerVideoStat').textContent = state.videos.length;
+        const extCount = state.videos.filter(v => v.sourceType === 'external').length;
+        document.getElementById('headerExternalStat').textContent = extCount;
+        document.getElementById('navPhotoCount').textContent = state.photos.length;
+      }
+
+      function renderCategoryControls() {
+        const pillBar = document.getElementById('categoryPillBar');
+        const sidebarList = document.getElementById('sidebarCategoryList');
+        const headerSelect = document.getElementById('headerCategorySelect');
+        const vidCatSelect = document.getElementById('vidCategoryInput');
+        const photoCatSelect = document.getElementById('photoCategoryInput');
+        const photoFilterSelect = document.getElementById('photoCategoryFilter');
+
+        // 1. Pill Bar
+        const allPills = ['all', ...state.categories];
+        pillBar.innerHTML = allPills.map(cat => {
+          const isActive = state.activeCategory.toLowerCase() === cat.toLowerCase();
+          const label = cat === 'all' ? 'All Videos' : cat;
+          return `<button type="button" data-cat-pill="${escapeHtml(cat)}" class="px-3 py-1 rounded-full text-xs font-bold transition ${
+            isActive
+              ? 'bg-[#ff9000] text-black shadow'
+              : 'bg-[#222] text-gray-300 hover:bg-[#333] hover:text-white'
+          }">${escapeHtml(label)}</button>`;
+        }).join('');
+
+        // 2. Sidebar List
+        sidebarList.innerHTML = state.categories.map(cat => {
+          const count = state.videos.filter(v => v.category.toLowerCase() === cat.toLowerCase()).length;
+          const isActive = state.activeCategory.toLowerCase() === cat.toLowerCase();
+          return `<button type="button" data-cat-pill="${escapeHtml(cat)}" class="w-full text-left px-2.5 py-1.5 rounded flex items-center justify-between transition ${
+            isActive ? 'bg-[#ff9000] text-black font-bold' : 'text-gray-300 hover:bg-[#242424]'
+          }">
+            <span class="truncate">${escapeHtml(cat)}</span>
+            <span class="text-xs ${isActive ? 'text-black font-extrabold' : 'text-gray-500'}">${count}</span>
+          </button>`;
+        }).join('');
+
+        // 3. Dropdowns
+        headerSelect.innerHTML = `<option value="all">All Categories</option>` +
+          state.categories.map(c => `<option value="${escapeHtml(c)}" ${state.activeCategory === c ? 'selected' : ''}>${escapeHtml(c)}</option>`).join('');
+
+        const catOptions = state.categories.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+        vidCatSelect.innerHTML = catOptions;
+        photoCatSelect.innerHTML = catOptions;
+        photoFilterSelect.innerHTML = `<option value="all">All Photo Categories</option>` + catOptions;
+      }
+
+      function getFilteredVideos() {
+        let list = [...state.videos];
+
+        if (state.activeCategory !== 'all') {
+          list = list.filter(v => v.category.toLowerCase() === state.activeCategory.toLowerCase());
+        }
+
+        if (state.searchQuery.trim() !== '') {
+          const q = state.searchQuery.toLowerCase().trim();
+          list = list.filter(v =>
+            v.title.toLowerCase().includes(q) ||
+            v.creator.toLowerCase().includes(q) ||
+            v.category.toLowerCase().includes(q) ||
+            (v.tags && v.tags.some(t => t.toLowerCase().includes(q)))
+          );
+        }
+
+        if (state.activeSort === 'views') {
+          list.sort((a, b) => b.views - a.views);
+        } else if (state.activeSort === 'rating') {
+          list.sort((a, b) => b.rating - a.rating);
+        } else if (state.activeSort === 'newest') {
+          list.sort((a, b) => String(b.id).localeCompare(String(a.id)));
+        } else if (state.activeSort === 'external') {
+          list = list.filter(v => v.sourceType === 'external');
+        } else if (state.activeSort === 'local') {
+          list = list.filter(v => v.sourceType !== 'external');
+        }
+
+        return list;
+      }
+
+      function renderVideoCardHtml(v) {
+        const thumbSrc = buildSvgThumbnail(v);
+        const isExternal = v.sourceType === 'external';
+        const sourceBadge = isExternal
+          ? `<span class="bg-[#ff9000] text-black text-[10px] font-black px-1.5 py-0.5 rounded uppercase">🔗 ${escapeHtml(v.sourceSite || 'External')}</span>`
+          : `<span class="bg-[#262626] text-gray-200 text-[10px] font-bold px-1.5 py-0.5 rounded uppercase">Uploaded</span>`;
+
+        return `
+          <article class="video-card bg-[#181818] border border-[#282828] rounded-md overflow-hidden flex flex-col justify-between group cursor-pointer transition hover:border-[#ff9000]/60" data-play-video="${escapeHtml(v.id)}">
+            <div>
+              <div class="relative aspect-video bg-black overflow-hidden">
+                <img src="${thumbSrc}" alt="${escapeHtml(v.title)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+                <div class="thumb-overlay opacity-0 transition duration-200 absolute inset-0 bg-black/40 flex items-center justify-center">
+                  <span class="bg-[#ff9000] text-black font-black text-xs px-3 py-1.5 rounded-full shadow-lg">▶ Play Stream</span>
+                </div>
+                <span class="absolute top-2 left-2 bg-black/80 text-[#ff9000] border border-[#ff9000]/50 text-[10px] font-black px-1.5 py-0.5 rounded">
+                  ${escapeHtml(v.quality || 'HD')}
+                </span>
+                <span class="absolute bottom-2 right-2 bg-black/90 text-white font-mono text-xs font-bold px-1.5 py-0.5 rounded">
+                  ${escapeHtml(v.duration || '12:00')}
+                </span>
+                <div class="absolute bottom-0 inset-x-0 h-1 bg-[#222]">
+                  <div class="preview-bar h-full bg-[#ff9000]"></div>
+                </div>
+              </div>
+
+              <div class="p-3 space-y-1.5">
+                <div class="flex items-center justify-between gap-2 text-[11px] text-gray-400">
+                  <span class="truncate font-semibold text-gray-300 hover:text-white">${escapeHtml(v.creator)} <span class="text-[#ff9000]">✔</span></span>
+                  ${sourceBadge}
+                </div>
+
+                <h3 class="video-title text-sm font-bold text-gray-100 leading-snug line-clamp-2 transition">
+                  ${escapeHtml(v.title)}
+                </h3>
+              </div>
+            </div>
+
+            <div class="px-3 pb-3 pt-1 flex items-center justify-between text-xs text-gray-400 border-t border-[#222]/80">
+              <div class="flex items-center space-x-2">
+                <span>${formatViews(v.views)}</span>
+                <span>•</span>
+                <span class="text-emerald-400 font-semibold">👍 ${escapeHtml(v.rating)}%</span>
+              </div>
+              <span class="text-[11px] text-[#ff9000] font-semibold">${escapeHtml(v.category)}</span>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderHomeFeed() {
+        const filtered = getFilteredVideos();
+        const grid = document.getElementById('videoGridContainer');
+        const countEl = document.getElementById('feedResultCount');
+        const headingEl = document.getElementById('feedHeadingText');
+        const badgeEl = document.getElementById('activeFilterBadge');
+
+        countEl.textContent = `${filtered.length} video${filtered.length === 1 ? '' : 's'} shown`;
+        headingEl.textContent = state.activeCategory === 'all'
+          ? 'Recommended Videos'
+          : `Category: ${state.activeCategory}`;
+        badgeEl.textContent = `Category: ${state.activeCategory === 'all' ? 'All' : state.activeCategory}${state.searchQuery ? ' • Search: "' + state.searchQuery + '"' : ''}`;
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full bg-[#181818] border border-[#2a2a2a] rounded-lg p-10 text-center space-y-3">
+              <p class="text-base font-bold text-white">No videos matched your active filter or search query.</p>
+              <p class="text-xs text-gray-400">Try clearing the filter or upload a new video in the Admin Studio.</p>
+              <button type="button" id="emptyResetBtn" class="bg-[#ff9000] text-black font-extrabold text-xs px-4 py-2 rounded">
+                Show All Videos
+              </button>
+            </div>
+          `;
+          const btn = document.getElementById('emptyResetBtn');
+          if (btn) {
+            btn.addEventListener('click', () => {
+              state.activeCategory = 'all';
+              state.searchQuery = '';
+              state.activeSort = 'recommended';
+              document.getElementById('searchInput').value = '';
+              renderAll();
+            });
+          }
+        } else {
+          grid.innerHTML = filtered.map(renderVideoCardHtml).join('');
+        }
+
+        // Home Photo Preview Strip
+        const homePhotos = document.getElementById('homePhotoPreviewGrid');
+        homePhotos.innerHTML = state.photos.slice(0, 6).map(p => {
+          const src = buildPhotoSvg(p);
+          return `
+            <div data-open-photo="${escapeHtml(p.id)}" class="bg-[#181818] border border-[#282828] hover:border-[#ff9000] rounded overflow-hidden cursor-pointer group transition">
+              <div class="aspect-video bg-black overflow-hidden">
+                <img src="${src}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover group-hover:scale-105 transition" />
+              </div>
+              <div class="p-2">
+                <p class="text-xs font-bold text-gray-200 truncate group-hover:text-[#ff9000]">${escapeHtml(p.title)}</p>
+                <span class="text-[10px] text-gray-400">${escapeHtml(p.category)} • ${escapeHtml(p.rating)}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function renderCategoriesView() {
+        const container = document.getElementById('categoriesGridContainer');
+        container.innerHTML = state.categories.map((cat, idx) => {
+          const matchingVideos = state.videos.filter(v => v.category.toLowerCase() === cat.toLowerCase());
+          const sampleVid = matchingVideos[0] || {
+            category: cat,
+            accent: idx % 2 === 0 ? '#ff9000' : '#38bdf8',
+            codeSnippet: `// ${cat}\nSELECT * FROM streams\nWHERE category = '${cat}';`
+          };
+          const thumb = buildSvgThumbnail(sampleVid);
+          return `
+            <div data-select-category="${escapeHtml(cat)}" class="bg-[#181818] border border-[#2a2a2a] hover:border-[#ff9000] rounded-lg overflow-hidden cursor-pointer group transition">
+              <div class="relative aspect-video bg-black overflow-hidden">
+                <img src="${thumb}" alt="${escapeHtml(cat)}" class="w-full h-full object-cover group-hover:scale-105 transition" />
+                <span class="absolute bottom-2 right-2 bg-[#ff9000] text-black text-[11px] font-black px-2 py-0.5 rounded">
+                  ${matchingVideos.length} Videos
+                </span>
+              </div>
+              <div class="p-3 flex items-center justify-between">
+                <span class="font-extrabold text-sm text-white group-hover:text-[#ff9000]">${escapeHtml(cat)}</span>
+                <span class="text-xs text-gray-400">Filter →</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function renderPhotosView() {
+        const filterVal = document.getElementById('photoCategoryFilter').value || 'all';
+        const list = filterVal === 'all'
+          ? state.photos
+          : state.photos.filter(p => p.category.toLowerCase() === filterVal.toLowerCase());
+
+        const container = document.getElementById('photosGridContainer');
+        container.innerHTML = list.map(p => {
+          const src = buildPhotoSvg(p);
+          return `
+            <div data-open-photo="${escapeHtml(p.id)}" class="bg-[#181818] border border-[#2a2a2a] hover:border-[#ff9000] rounded-lg overflow-hidden cursor-pointer group transition">
+              <div class="aspect-video bg-black overflow-hidden relative">
+                <img src="${src}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover group-hover:scale-105 transition" />
+                <span class="absolute top-2 right-2 bg-black/80 text-[#ff9000] text-[10px] font-extrabold px-2 py-0.5 rounded">FULL HD</span>
+              </div>
+              <div class="p-3 space-y-1">
+                <h3 class="text-sm font-bold text-white group-hover:text-[#ff9000] line-clamp-2">${escapeHtml(p.title)}</h3>
+                <div class="flex items-center justify-between text-xs text-gray-400">
+                  <span>by ${escapeHtml(p.creator)}</span>
+                  <span class="text-emerald-400 font-bold">👍 ${escapeHtml(p.rating)}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function renderChannelsView() {
+        const creatorsMap = {};
+        state.videos.forEach(v => {
+          if (!creatorsMap[v.creator]) {
+            creatorsMap[v.creator] = { name: v.creator, count: 0, views: 0, categories: new Set() };
+          }
+          creatorsMap[v.creator].count += 1;
+          creatorsMap[v.creator].views += Number(v.views) || 0;
+          creatorsMap[v.creator].categories.add(v.category);
+        });
+
+        const creators = Object.values(creatorsMap);
+        const container = document.getElementById('channelsGridContainer');
+        container.innerHTML = creators.map(c => {
+          const initials = c.name.slice(0, 2).toUpperCase();
+          const cats = Array.from(c.categories).join(', ');
+          return `
+            <div data-filter-creator="${escapeHtml(c.name)}" class="bg-[#181818] border border-[#2a2a2a] hover:border-[#ff9000] rounded-lg p-4 flex items-center justify-between cursor-pointer group transition">
+              <div class="flex items-center space-x-3.5">
+                <div class="w-12 h-12 rounded-full bg-[#ff9000] text-black font-black text-base flex items-center justify-center shrink-0">
+                  ${escapeHtml(initials)}
+                </div>
+                <div>
+                  <h3 class="text-sm sm:text-base font-extrabold text-white group-hover:text-[#ff9000] flex items-center space-x-1">
+                    <span>${escapeHtml(c.name)}</span>
+                    <span class="text-[#ff9000] text-xs">✔</span>
+                  </h3>
+                  <p class="text-xs text-gray-400">${c.count} Videos • ${formatViews(c.views)}</p>
+                  <p class="text-[11px] text-gray-500 truncate max-w-[200px]">${escapeHtml(cats)}</p>
+                </div>
+              </div>
+              <span class="bg-[#242424] group-hover:bg-[#ff9000] group-hover:text-black text-gray-300 text-xs font-bold px-3 py-1.5 rounded transition">
+                View Feed
+              </span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function updateAdminLivePreview() {
+        const previewBox = document.getElementById('adminLivePreviewCard');
+        if (!previewBox) return;
+        const sample = {
+          id: 'preview',
+          title: document.getElementById('vidTitleInput').value || 'Your Custom Video Title Appears Here',
+          creator: document.getElementById('vidCreatorInput').value || 'CreatorName',
+          category: document.getElementById('vidCategoryInput').value || 'Sex-Stack',
+          duration: document.getElementById('vidDurationInput').value || '18:45',
+          quality: document.getElementById('vidQualityInput').value || '4K',
+          rating: document.getElementById('vidRatingInput').value || 98,
+          views: 12500,
+          sourceType: document.getElementById('videoSourceType').value,
+          sourceSite: document.getElementById('vidSourceSiteInput').value || 'External Site',
+          thumbUrl: document.getElementById('vidThumbUrlInput').value || '',
+          accent: '#ff9000',
+          codeSnippet: 'FUCKMYASS'
+        };
+        previewBox.innerHTML = renderVideoCardHtml(sample);
+      }
+
+      function renderAdminManagePanel() {
+        const catList = document.getElementById('adminCategoryManagerList');
+        catList.innerHTML = state.categories.map(cat => `
+          <span class="bg-[#242424] border border-[#383838] text-gray-200 text-xs font-semibold px-3 py-1.5 rounded flex items-center space-x-2">
+            <span>${escapeHtml(cat)}</span>
+            <button type="button" data-delete-cat="${escapeHtml(cat)}" class="text-gray-400 hover:text-red-400 font-bold" title="Remove category">✕</button>
+          </span>
+        `).join('');
+
+        document.getElementById('adminTableCount').textContent = state.videos.length;
+        const tbody = document.getElementById('adminVideoTableBody');
+        tbody.innerHTML = state.videos.map(v => `
+          <tr class="hover:bg-[#202020]">
+            <td class="py-2.5 px-2 font-semibold text-white max-w-xs truncate">${escapeHtml(v.title)}</td>
+            <td class="py-2.5 px-2 text-[#ff9000]">${escapeHtml(v.category)}</td>
+            <td class="py-2.5 px-2">
+              ${v.sourceType === 'external'
+                ? `<span class="bg-[#ff9000]/20 text-[#ff9000] border border-[#ff9000]/40 px-2 py-0.5 rounded text-[11px]">External (${escapeHtml(v.sourceSite)})</span>`
+                : `<span class="bg-[#262626] text-gray-300 px-2 py-0.5 rounded text-[11px]">Local Upload</span>`}
+            </td>
+            <td class="py-2.5 px-2 text-gray-300">${formatViews(v.views)}</td>
+            <td class="py-2.5 px-2 text-emerald-400 font-bold">${escapeHtml(v.rating)}%</td>
+            <td class="py-2.5 px-2 text-right space-x-2 whitespace-nowrap">
+              <button type="button" data-play-video="${escapeHtml(v.id)}" class="text-xs text-[#ff9000] hover:underline font-semibold">Play</button>
+              <button type="button" data-delete-video="${escapeHtml(v.id)}" class="text-xs text-red-400 hover:underline font-semibold">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Navigation Switching
+      function switchView(viewName) {
+        state.activeView = viewName;
+        const views = ['home', 'categories', 'photos', 'channels', 'admin', 'contact'];
+        views.forEach(v => {
+          const el = document.getElementById('view-' + v);
+          if (el) el.classList.toggle('hidden', v !== viewName);
+        });
+
+        document.querySelectorAll('.nav-tab').forEach(btn => {
+          const target = btn.getAttribute('data-nav');
+          btn.classList.toggle('nav-tab-active', target === viewName);
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Video Modal & Canvas Animation
+      let activeModalVideoId = null;
+      let simAnimId = null;
+      let simPlaying = true;
+      let simTick = 0;
+
+      function startSimCanvas(video) {
+        cancelAnimationFrame(simAnimId);
+        const canvas = document.getElementById('modalSimCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        simPlaying = true;
+        document.getElementById('simPlayPauseBtn').textContent = '❚❚ Pause';
+
+        function draw() {
+          if (simPlaying) simTick += 1;
+          ctx.fillStyle = '#0a0a0a';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // Top IDE Bar
+          ctx.fillStyle = '#181818';
+          ctx.fillRect(0, 0, canvas.width, 46);
+          ctx.fillStyle = '#ff9000';
+          ctx.font = 'bold 16px Inter, sans-serif';
+          ctx.fillText(`▶ LIVE STREAM: ${video.title.slice(0, 58)}`, 24, 29);
+
+          // Animated code lines
+          const lines = (video.codeSnippet || 'fn stream() {}').split('\n');
+          ctx.font = '600 22px monospace';
+          lines.forEach((line, i) => {
+            ctx.fillStyle = i === 0 ? '#ff9000' : '#e5e7eb';
+            const revealChars = Math.min(line.length, Math.floor((simTick / 2) % (line.length + 20)));
+            ctx.fillText(line.slice(0, revealChars), 48, 130 + i * 44);
+          });
+
+          // Animated waveform / throughput bars at bottom
+          for (let i = 0; i < 36; i++) {
+            const h = 18 + Math.abs(Math.sin((simTick * 0.06) + i * 0.45)) * 95;
+            ctx.fillStyle = i % 3 === 0 ? '#ff9000' : '#2e2e2e';
+            ctx.fillRect(48 + i * 24, 460 - h, 16, h);
+          }
+
+          simAnimId = requestAnimationFrame(draw);
+        }
+        draw();
+      }
+
+      function openVideoModal(videoId) {
+        const video = state.videos.find(v => v.id === videoId);
+        if (!video) return;
+        activeModalVideoId = video.id;
+        video.views = (Number(video.views) || 0) + 1;
+        saveState();
+
+        document.getElementById('modalQualityBadge').textContent = video.quality || '4K';
+        document.getElementById('modalVideoTitle').textContent = video.title;
+        document.getElementById('modalCreatorAvatar').textContent = video.creator.slice(0, 2).toUpperCase();
+        document.getElementById('modalCreatorName').textContent = video.creator;
+        document.getElementById('modalViewsText').textContent = `${formatViews(video.views)} • ${video.dateLabel || 'Just now'}`;
+        document.getElementById('modalLikePct').textContent = `${video.rating}%`;
+        document.getElementById('modalDescription').textContent = video.description || '';
+
+        const extBtn = document.getElementById('modalExternalLinkBtn');
+        const srcBadge = document.getElementById('modalSourceBadge');
+        if (video.sourceType === 'external' && video.externalUrl) {
+          extBtn.href = video.externalUrl;
+          extBtn.classList.remove('hidden');
+          srcBadge.textContent = `External Source: ${video.sourceSite || 'Partner Website'}`;
+        } else {
+          extBtn.classList.add('hidden');
+          srcBadge.textContent = 'Direct CodeHub Stream';
+        }
+
+        // Check if real video file / direct video stream
+        const html5Vid = document.getElementById('modalHtml5Video');
+        const simCanvas = document.getElementById('modalSimCanvas');
+        const simControls = document.getElementById('modalSimControls');
+
+        const directUrl = video.videoDataUrl || (video.externalUrl && /\.(mp4|webm|ogg)(\?.*)?$/i.test(video.externalUrl) ? video.externalUrl : '');
+        if (directUrl) {
+          cancelAnimationFrame(simAnimId);
+          simCanvas.classList.add('hidden');
+          simControls.classList.add('hidden');
+          html5Vid.classList.remove('hidden');
+          html5Vid.src = directUrl;
+          html5Vid.play().catch(() => {});
+        } else {
+          html5Vid.pause();
+          html5Vid.classList.add('hidden');
+          simCanvas.classList.remove('hidden');
+          simControls.classList.remove('hidden');
+          startSimCanvas(video);
+        }
+
+        // Tags
+        const tagBox = document.getElementById('modalTagContainer');
+        tagBox.innerHTML = (video.tags || []).map(t =>
+          `<span class="bg-[#242424] text-[#ff9000] text-xs font-semibold px-2.5 py-1 rounded">#${escapeHtml(t)}</span>`
+        ).join('');
+
+        renderModalComments(video.id);
+
+        // Related videos
+        const related = state.videos.filter(v => v.id !== video.id).slice(0, 4);
+        document.getElementById('modalRelatedList').innerHTML = related.map(r => `
+          <div data-play-video="${escapeHtml(r.id)}" class="flex items-center justify-between p-2 rounded bg-[#1c1c1c] hover:bg-[#282828] cursor-pointer">
+            <div class="truncate pr-2">
+              <p class="text-xs font-bold text-white truncate">${escapeHtml(r.title)}</p>
+              <span class="text-[10px] text-gray-400">${escapeHtml(r.creator)} • ${escapeHtml(r.duration)}</span>
+            </div>
+            <span class="text-[#ff9000] text-xs font-black shrink-0">▶</span>
+          </div>
+        `).join('');
+
+        document.getElementById('videoModal').classList.remove('hidden');
+        renderHomeFeed();
+      }
+
+      function renderModalComments(videoId) {
+        const list = state.comments[videoId] || [
+          { user: 'DevViewer99', text: 'Clean 4K stream and super helpful code breakdown.', time: '2h ago' }
+        ];
+        document.getElementById('modalCommentsList').innerHTML = list.map(c => `
+          <div class="bg-[#1c1c1c] border border-[#2a2a2a] rounded p-2.5">
+            <div class="flex items-center justify-between text-[11px] mb-1">
+              <span class="font-bold text-[#ff9000]">${escapeHtml(c.user)}</span>
+              <span class="text-gray-500">${escapeHtml(c.time)}</span>
+            </div>
+            <p class="text-gray-200">${escapeHtml(c.text)}</p>
+          </div>
+        `).join('');
+      }
+
+      function closeVideoModal() {
+        cancelAnimationFrame(simAnimId);
+        const html5Vid = document.getElementById('modalHtml5Video');
+        if (html5Vid) html5Vid.pause();
+        document.getElementById('videoModal').classList.add('hidden');
+      }
+
+      function renderAll() {
+        renderBrandingAndCounts();
+        renderCategoryControls();
+        renderHomeFeed();
+        renderCategoriesView();
+        renderPhotosView();
+        renderChannelsView();
+        renderAdminManagePanel();
+        updateAdminLivePreview();
+      }
+
+      // EVENT DELEGATION & LISTENERS
+      document.addEventListener('click', (e) => {
+        const navBtn = e.target.closest('[data-nav]');
+        if (navBtn) {
+          switchView(navBtn.getAttribute('data-nav'));
+          return;
+        }
+
+        const openAdminBtn = e.target.closest('[data-open-admin]');
+        if (openAdminBtn) {
+          const tab = openAdminBtn.getAttribute('data-open-admin');
+          switchView('admin');
+          switchAdminSubTab(tab);
+          return;
+        }
+
+        const catPill = e.target.closest('[data-cat-pill]');
+        if (catPill) {
+          state.activeCategory = catPill.getAttribute('data-cat-pill');
+          switchView('home');
+          renderAll();
+          return;
+        }
+
+        const selectCatCard = e.target.closest('[data-select-category]');
+        if (selectCatCard) {
+          state.activeCategory = selectCatCard.getAttribute('data-select-category');
+          switchView('home');
+          renderAll();
+          showToast(`Filtered feed by category: ${state.activeCategory}`);
+          return;
+        }
+
+        const filterCreator = e.target.closest('[data-filter-creator]');
+        if (filterCreator) {
+          state.searchQuery = filterCreator.getAttribute('data-filter-creator');
+          document.getElementById('searchInput').value = state.searchQuery;
+          switchView('home');
+          renderAll();
+          showToast(`Showing videos from creator: ${state.searchQuery}`);
+          return;
+        }
+
+        const sortBtn = e.target.closest('[data-sort-btn]');
+        if (sortBtn) {
+          state.activeSort = sortBtn.getAttribute('data-sort-btn');
+          document.getElementById('feedSortSelect').value = state.activeSort;
+          switchView('home');
+          renderAll();
+          return;
+        }
+
+        const playCard = e.target.closest('[data-play-video]');
+        if (playCard && !e.target.closest('[data-delete-video]')) {
+          const vidId = playCard.getAttribute('data-play-video');
+          if (vidId && vidId !== 'preview') openVideoModal(vidId);
+          return;
+        }
+
+        const openPhoto = e.target.closest('[data-open-photo]');
+        if (openPhoto) {
+          const pId = openPhoto.getAttribute('data-open-photo');
+          const photo = state.photos.find(p => p.id === pId);
+          if (photo) {
+            document.getElementById('photoModalTitle').textContent = photo.title;
+            document.getElementById('photoModalMeta').textContent = `Uploaded by ${photo.creator} • Category: ${photo.category} • Rating: ${photo.rating}`;
+            document.getElementById('photoModalBody').innerHTML = `<img src="${buildPhotoSvg(photo)}" alt="${escapeHtml(photo.title)}" class="max-h-[65vh] w-auto object-contain rounded" />`;
+            document.getElementById('photoModal').classList.remove('hidden');
+          }
+          return;
+        }
+
+        const delVideo = e.target.closest('[data-delete-video]');
+        if (delVideo) {
+          const id = delVideo.getAttribute('data-delete-video');
+          state.videos = state.videos.filter(v => v.id !== id);
+          saveState();
+          renderAll();
+          showToast('Video removed from visitor feed.');
+          return;
+        }
+
+        const delCat = e.target.closest('[data-delete-cat]');
+        if (delCat) {
+          const cName = delCat.getAttribute('data-delete-cat');
+          state.categories = state.categories.filter(c => c !== cName);
+          if (state.activeCategory === cName) state.activeCategory = 'all';
+          saveState();
+          renderAll();
+          showToast(`Removed category: ${cName}`);
+          return;
+        }
+
+        const adminSub = e.target.closest('[data-admin-tab]');
+        if (adminSub) {
+          switchAdminSubTab(adminSub.getAttribute('data-admin-tab'));
+          return;
+        }
+      });
+
+      function switchAdminSubTab(tabName) {
+        ['video', 'photo', 'manage', 'branding'].forEach(t => {
+          const panel = document.getElementById('admin-panel-' + t);
+          if (panel) panel.classList.toggle('hidden', t !== tabName);
+        });
+        document.querySelectorAll('.admin-subtab').forEach(btn => {
+          const active = btn.getAttribute('data-admin-tab') === tabName;
+          btn.className = active
+            ? 'admin-subtab bg-[#ff9000] text-black font-extrabold text-xs sm:text-sm px-4 py-2 rounded transition'
+            : 'admin-subtab bg-[#222] text-gray-300 hover:text-white font-bold text-xs sm:text-sm px-4 py-2 rounded transition';
+        });
+      }
+
+      // Mobile Sidebar Toggle
+      document.getElementById('mobileSidebarBtn').addEventListener('click', () => {
+        const sb = document.getElementById('leftSidebar');
+        sb.classList.toggle('hidden');
+      });
+
+      // Search Input & Form
+      const searchInput = document.getElementById('searchInput');
+      const clearSearchBtn = document.getElementById('clearSearchBtn');
+      searchInput.addEventListener('input', () => {
+        state.searchQuery = searchInput.value;
+        clearSearchBtn.classList.toggle('hidden', !state.searchQuery);
+        if (state.activeView !== 'home') switchView('home');
+        renderHomeFeed();
+      });
+
+      clearSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        state.searchQuery = '';
+        clearSearchBtn.classList.add('hidden');
+        renderHomeFeed();
+      });
+
+      document.getElementById('searchForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        state.searchQuery = searchInput.value;
+        state.activeCategory = document.getElementById('headerCategorySelect').value;
+        switchView('home');
+        renderAll();
+      });
+
+      document.getElementById('headerCategorySelect').addEventListener('change', (e) => {
+        state.activeCategory = e.target.value;
+        switchView('home');
+        renderAll();
+      });
+
+      document.getElementById('feedSortSelect').addEventListener('change', (e) => {
+        state.activeSort = e.target.value;
+        renderHomeFeed();
+      });
+
+      document.getElementById('resetFiltersBtn').addEventListener('click', () => {
+        state.activeCategory = 'all';
+        state.activeSort = 'recommended';
+        state.searchQuery = '';
+        searchInput.value = '';
+        document.getElementById('feedSortSelect').value = 'recommended';
+        renderAll();
+        showToast('All feed filters reset.');
+      });
+
+      document.getElementById('photoCategoryFilter').addEventListener('change', () => {
+        renderPhotosView();
+      });
+
+      // Quick Add Category Form
+      document.getElementById('quickAddCategoryForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('quickCategoryInput');
+        const val = input.value.trim();
+        if (val && !state.categories.includes(val)) {
+          state.categories.push(val);
+          saveState();
+          renderAll();
+          input.value = '';
+          showToast(`Added new category: ${val}`);
+        }
+      });
+
+      // Admin Source Type Switcher (External Link vs Local File)
+      const extBtn = document.getElementById('sourceTypeExternalBtn');
+      const locBtn = document.getElementById('sourceTypeLocalBtn');
+      extBtn.addEventListener('click', () => {
+        document.getElementById('videoSourceType').value = 'external';
+        document.getElementById('externalUrlFieldGroup').classList.remove('hidden');
+        document.getElementById('localFileFieldGroup').classList.add('hidden');
+        extBtn.className = 'bg-[#ff9000] text-black text-xs font-extrabold px-3 py-1 rounded';
+        locBtn.className = 'text-gray-300 hover:text-white text-xs font-bold px-3 py-1 rounded';
+        updateAdminLivePreview();
+      });
+
+      locBtn.addEventListener('click', () => {
+        document.getElementById('videoSourceType').value = 'local';
+        document.getElementById('externalUrlFieldGroup').classList.add('hidden');
+        document.getElementById('localFileFieldGroup').classList.remove('hidden');
+        locBtn.className = 'bg-[#ff9000] text-black text-xs font-extrabold px-3 py-1 rounded';
+        extBtn.className = 'text-gray-300 hover:text-white text-xs font-bold px-3 py-1 rounded';
+        updateAdminLivePreview();
+      });
+
+      // Live Preview Updates on Admin Input
+      ['vidTitleInput', 'vidCreatorInput', 'vidCategoryInput', 'vidDurationInput', 'vidQualityInput', 'vidRatingInput', 'vidSourceSiteInput', 'vidThumbUrlInput'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateAdminLivePreview);
+      });
+
+      // Custom Thumbnail File Reader
+      let uploadedThumbDataUrl = '';
+      document.getElementById('vidThumbFileInput').addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          uploadedThumbDataUrl = reader.result;
+          document.getElementById('vidThumbUrlInput').value = uploadedThumbDataUrl;
+          updateAdminLivePreview();
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Local Video File Object URL
+      let uploadedVideoObjectUrl = '';
+      document.getElementById('vidLocalFileInput').addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        uploadedVideoObjectUrl = URL.createObjectURL(file);
+        showToast(`Loaded video file: ${file.name}`);
+      });
+
+      // Submit New Video / External Link Form
+      document.getElementById('adminVideoForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const sourceType = document.getElementById('videoSourceType').value;
+        const title = document.getElementById('vidTitleInput').value.trim();
+        const creator = document.getElementById('vidCreatorInput').value.trim() || 'AdminCreator';
+        const category = document.getElementById('vidCategoryInput').value;
+        const duration = document.getElementById('vidDurationInput').value.trim() || '15:00';
+        const quality = document.getElementById('vidQualityInput').value;
+        const rating = Number(document.getElementById('vidRatingInput').value) || 98;
+        const externalUrl = document.getElementById('vidExternalUrlInput').value.trim();
+        const sourceSite = document.getElementById('vidSourceSiteInput').value.trim() || 'External Link';
+        const thumbUrl = document.getElementById('vidThumbUrlInput').value.trim() || uploadedThumbDataUrl;
+        const tags = document.getElementById('vidTagsInput').value.split(',').map(t => t.trim()).filter(Boolean);
+        const description = document.getElementById('vidDescInput').value.trim();
+
+        const newVideo = {
+          id: 'vid-' + Date.now(),
+          title,
+          creator,
+          category,
+          duration,
+          quality,
+          views: 1,
+          rating,
+          dateLabel: 'Just now',
+          sourceType,
+          sourceSite: sourceType === 'external' ? sourceSite : 'Direct Upload',
+          externalUrl: sourceType === 'external' ? (externalUrl || 'https://pornhub.com') : '',
+          videoDataUrl: sourceType === 'local' ? uploadedVideoObjectUrl : '',
+          thumbUrl,
+          accent: '#ff9000',
+          codeSnippet: `// ${title.slice(0, 34)}\nStream::connect("${sourceSite}");`,
+          tags,
+          description
+        };
+
+        state.videos.unshift(newVideo);
+        uploadedThumbDataUrl = '';
+        document.getElementById('vidTitleInput').value = '';
+        document.getElementById('vidExternalUrlInput').value = '';
+        document.getElementById('vidThumbUrlInput').value = '';
+        saveState();
+        renderAll();
+        switchView('home');
+        showToast('Published new video to the visitor feed!');
+      });
+
+      // Photo File Upload & Submit
+      let uploadedPhotoDataUrl = '';
+      document.getElementById('photoFileInput').addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          uploadedPhotoDataUrl = reader.result;
+          showToast(`Loaded image: ${file.name}`);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('adminPhotoForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = document.getElementById('photoTitleInput').value.trim();
+        const category = document.getElementById('photoCategoryInput').value;
+        const creator = document.getElementById('photoCreatorInput').value.trim() || 'Admin';
+        const urlInput = document.getElementById('photoUrlInput').value.trim();
+
+        const newPhoto = {
+          id: 'pho-' + Date.now(),
+          title,
+          creator,
+          category,
+          views: '1 view',
+          rating: '100%',
+          imageUrl: uploadedPhotoDataUrl || urlInput,
+          accent: '#ff9000',
+          diagramText: title.slice(0, 36)
+        };
+
+        state.photos.unshift(newPhoto);
+        uploadedPhotoDataUrl = '';
+        document.getElementById('photoTitleInput').value = '';
+        document.getElementById('photoUrlInput').value = '';
+        saveState();
+        renderAll();
+        switchView('photos');
+        showToast('Photo uploaded to gallery!');
+      });
+
+      // Branding Form
+      document.getElementById('brandingForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        state.brandPrefix = document.getElementById('brandPrefixInput').value.trim() || 'Corn';
+        state.brandSuffix = document.getElementById('brandSuffixInput').value.trim() || 'Hub';
+        saveState();
+        renderBrandingAndCounts();
+        showToast(`Updated site logo to ${state.brandPrefix}${state.brandSuffix}!`);
+      });
+
+      // Export & Reset Buttons
+      document.getElementById('exportDataBtn').addEventListener('click', () => {
+        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(state, null, 2));
+        const a = document.createElement('a');
+        a.href = dataStr;
+        a.download = 'codehub_feed_backup.json';
+        a.click();
+        showToast('Exported feed database as JSON!');
+      });
+
+      document.getElementById('resetDemoDataBtn').addEventListener('click', () => {
+        state.categories = [...DEFAULT_CATEGORIES];
+        state.videos = [...DEFAULT_VIDEOS];
+        state.photos = [...DEFAULT_PHOTOS];
+        state.brandPrefix = 'Corn';
+        state.brandSuffix = 'Hub';
+        saveState();
+        renderAll();
+        showToast('Restored default demo videos and categories.');
+      });
+
+      // Modal Controls
+      document.getElementById('closeVideoModalBtn').addEventListener('click', closeVideoModal);
+      document.getElementById('closePhotoModalBtn').addEventListener('click', () => {
+        document.getElementById('photoModal').classList.add('hidden');
+      });
+
+      document.getElementById('simPlayPauseBtn').addEventListener('click', () => {
+        simPlaying = !simPlaying;
+        document.getElementById('simPlayPauseBtn').textContent = simPlaying ? '❚❚ Pause' : '▶ Play';
+      });
+
+      document.getElementById('modalLikeBtn').addEventListener('click', () => {
+        const vid = state.videos.find(v => v.id === activeModalVideoId);
+        if (vid) {
+          vid.rating = Math.min(100, Number(vid.rating) + 1);
+          document.getElementById('modalLikePct').textContent = `${vid.rating}%`;
+          saveState();
+          renderHomeFeed();
+          showToast('Upvoted video!');
+        }
+      });
+
+      document.getElementById('modalCopyLinkBtn').addEventListener('click', () => {
+        const vid = state.videos.find(v => v.id === activeModalVideoId);
+        const linkToCopy = (vid && vid.externalUrl) ? vid.externalUrl : window.location.href;
+        try {
+          const temp = document.createElement('input');
+          temp.value = linkToCopy;
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand('copy');
+          document.body.removeChild(temp);
+        } catch (err) {}
+        showToast('Video stream link copied to clipboard!');
+      });
+
+      document.getElementById('modalCommentForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!activeModalVideoId) return;
+        const input = document.getElementById('modalCommentInput');
+        const text = input.value.trim();
+        if (!text) return;
+        if (!state.comments[activeModalVideoId]) state.comments[activeModalVideoId] = [];
+        state.comments[activeModalVideoId].unshift({
+          user: 'Visitor_Dev',
+          text,
+          time: 'Just now'
+        });
+        input.value = '';
+        saveState();
+        renderModalComments(activeModalVideoId);
+        showToast('Comment posted!');
+      });
+
+      // Contact Form
+      document.getElementById('contactForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('contactName').value.trim();
+        const dept = document.getElementById('contactDept').value;
+        const msg = document.getElementById('contactMessage').value.trim();
+        state.tickets.unshift({
+          id: 'TKT-' + Math.floor(1000 + Math.random() * 9000),
+          name,
+          dept,
+          msg,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        document.getElementById('contactForm').reset();
+        const listEl = document.getElementById('submittedTicketsList');
+        listEl.innerHTML = state.tickets.map(t => `
+          <div class="bg-[#121212] border border-[#2a2a2a] rounded p-2.5">
+            <div class="flex items-center justify-between text-[#ff9000] font-bold">
+              <span>${escapeHtml(t.id)} • ${escapeHtml(t.dept)}</span>
+              <span class="text-gray-500">${escapeHtml(t.time)}</span>
+            </div>
+            <p class="text-gray-300 mt-1">${escapeHtml(t.msg)}</p>
+          </div>
+        `).join('');
+        showToast('Support ticket submitted!');
+      });
+
+      // Initialize App
+      loadState();
+      renderAll();
+    })();
+  </script>
+</body>
+</html>

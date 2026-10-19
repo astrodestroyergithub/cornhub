@@ -1,0 +1,47 @@
+* { box-sizing: border-box; }
+    body {
+      background-color: #0f0f0f;
+      color: #f3f4f6;
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    /* Custom dark scrollbars */
+    ::-webkit-scrollbar { width: 8px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f0f0f; }
+    ::-webkit-scrollbar-thumb { background: #333333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #ff9000; }
+
+    .hub-logo-pill {
+      background-color: #ff9000;
+      color: #000000;
+      border-radius: 5px;
+      padding: 1px 7px;
+      margin-left: 3px;
+      font-weight: 900;
+      display: inline-block;
+      line-height: 1.15;
+    }
+    .nav-tab-active {
+      color: #ffffff !important;
+      border-bottom: 3px solid #ff9000;
+      background-color: #1f1f1f;
+    }
+    .video-card:hover .video-title {
+      color: #ff9000;
+    }
+    .video-card:hover .thumb-overlay {
+      opacity: 1;
+    }
+    .video-card .preview-bar {
+      width: 0%;
+      transition: width 1.6s linear;
+    }
+    .video-card:hover .preview-bar {
+      width: 100%;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
