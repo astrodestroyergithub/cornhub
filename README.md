@@ -1,6 +1,6 @@
-# CodeHub — High-Contrast Video & Photo Portal (Netlify Ready)
+# CornHub — High-Contrast Video & Photo Portal for Streaming World\'s Best Horrible Content
 
-A responsive, high-contrast dark-and-orange (`#0f0f0f` / `#1b1b1b` / `#ff9000`) video and photo streaming web application tailored for coding videos, technical streams, and visual galleries. It includes an integrated **Admin Studio** for uploading local videos and photos, indexing external video URLs with custom thumbnails and metadata, managing filter categories, and customizing the header logo branding.
+A responsive, high-contrast dark-and-orange (`#0f0f0f` / `#1b1b1b` / `#ff9000`) gross video and photo streaming web application tailored for explicit videos and snapshots. It includes an integrated **Admin Studio** for uploading local videos and photos, indexing external video URLs with custom thumbnails and metadata, managing filter categories, and customizing the header logo branding.
 
 ## Project Directory Structure for Netlify
 
