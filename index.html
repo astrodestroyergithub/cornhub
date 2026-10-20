@@ -1005,6 +1005,7 @@
           <!-- Interactive Video / Canvas Stage -->
           <div class="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden">
             <video id="modalHtml5Video" class="hidden w-full h-full object-contain" controls playsinline></video>
+            <iframe id="modalYoutubeIframe" class="hidden w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="YouTube Video Player"></iframe>
             <canvas id="modalSimCanvas" width="960" height="540" class="w-full h-full object-cover"></canvas>
 
             <!-- Custom Overlay Controls for Simulated / External Stream -->
@@ -1311,8 +1312,10 @@
           dateLabel: '5 days ago',
           sourceType: 'local',
           sourceSite: 'CornHub Originals',
-          externalUrl: '',
-          videoDataUrl: 'https://youtu.be/YWLigdjI50I?si=ZHWwCkTk2A4OmdyB',
+          platform: 'YouTube',
+          sourceSite: 'YouTube',
+          externalUrl: 'https://youtu.be/YWLigdjI50I?si=ZHWwCkTk2A4OmdyB',
+          videoDataUrl: '',
           thumbUrl: 'https://raw.githubusercontent.com/astrodestroyergithub/cornhub/refs/heads/master/assets/statics/vid7.jpg',
           accent: '#ec4899',
           codeSnippet: 'PORN',
@@ -1478,9 +1481,25 @@
           .replace(/"/g, '&quot;');
       }
 
+      function getYouTubeId(url) {
+        if (!url) return null;
+        const m = String(url).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+        return m ? m[1] : null;
+      }
+
+      function isYouTubeVideo(video) {
+        if (!video) return false;
+        const hasYtKey = [video.platform, video.sourceSite, video.sourceType]
+          .some(val => String(val || '').toLowerCase() === 'youtube');
+        return hasYtKey && Boolean(getYouTubeId(video.externalUrl));
+      }
+
       function buildSvgThumbnail(video) {
         if (video.thumbUrl && video.thumbUrl.trim() !== '') {
           return video.thumbUrl;
+        }
+        if (isYouTubeVideo(video)) {
+          return `https://img.youtube.com/vi/${getYouTubeId(video.externalUrl)}/hqdefault.jpg`;
         }
         const accent = video.accent || '#ff9000';
         const cat = escapeHtml(video.category || 'CodeHub');
@@ -1960,18 +1979,31 @@
 
         // Check if real video file / direct video stream
         const html5Vid = document.getElementById('modalHtml5Video');
+        const ytIframe = document.getElementById('modalYoutubeIframe');
         const simCanvas = document.getElementById('modalSimCanvas');
         const simControls = document.getElementById('modalSimControls');
 
+        const ytId = isYouTubeVideo(video) ? getYouTubeId(video.externalUrl) : null;
         const directUrl = video.videoDataUrl || (video.externalUrl && /\.(mp4|webm|ogg)(\?.*)?$/i.test(video.externalUrl) ? video.externalUrl : '');
-        if (directUrl) {
+
+        if (ytId && ytIframe) {
           cancelAnimationFrame(simAnimId);
+          html5Vid.pause();
+          html5Vid.classList.add('hidden');
+          simCanvas.classList.add('hidden');
+          simControls.classList.add('hidden');
+          ytIframe.classList.remove('hidden');
+          ytIframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`;
+        } else if (directUrl) {
+          cancelAnimationFrame(simAnimId);
+          if (ytIframe) { ytIframe.src = ''; ytIframe.classList.add('hidden'); }
           simCanvas.classList.add('hidden');
           simControls.classList.add('hidden');
           html5Vid.classList.remove('hidden');
           html5Vid.src = directUrl;
           html5Vid.play().catch(() => {});
         } else {
+          if (ytIframe) { ytIframe.src = ''; ytIframe.classList.add('hidden'); }
           html5Vid.pause();
           html5Vid.classList.add('hidden');
           simCanvas.classList.remove('hidden');
@@ -2022,6 +2054,11 @@
         cancelAnimationFrame(simAnimId);
         const html5Vid = document.getElementById('modalHtml5Video');
         if (html5Vid) html5Vid.pause();
+        const ytIframe = document.getElementById('modalYoutubeIframe');
+        if (ytIframe) {
+          ytIframe.src = '';
+          ytIframe.classList.add('hidden');
+        }
         document.getElementById('videoModal').classList.add('hidden');
       }
 
@@ -2327,7 +2364,7 @@
           videoDataUrl: sourceType === 'local' ? uploadedVideoObjectUrl : '',
           thumbUrl,
           accent: '#ff9000',
-          codeSnippet: `${title.slice(0, 34)}\nCornHub.com Originals by ${creator}`,
+          codeSnippet: `${title.slice(0, 34)}\nCornHub Originals by ${creator}`,
           tags,
           description
         };
