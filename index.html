@@ -2230,7 +2230,8 @@
           const sampleVid = matchingVideos[0] || {
             category: cat,
             accent: idx % 2 === 0 ? '#ff9000' : '#38bdf8',
-            codeSnippet: `// ${cat}\nSELECT * FROM streams\nWHERE category = '${cat}';`
+            // codeSnippet: `// ${cat}\nSELECT * FROM streams\nWHERE category = '${cat}';`
+            codeSnippet: `${cat}\nNo Videos Found!`
           };
           const thumb = buildSvgThumbnail(sampleVid);
           return `
