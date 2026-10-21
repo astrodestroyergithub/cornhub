@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Matte dark squircle background -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#0d0d0d" stroke="#262626" stroke-width="2" />
+
+  <!-- Bold white letter 'C' on the left -->
+  <path
+    d="M25.5 23.5 C23.5 20.8 20.5 19.5 17 19.5 C10.8 19.5 6.8 24.5 6.8 32 C6.8 39.5 10.8 44.5 17 44.5 C20.5 44.5 23.5 43.2 25.5 40.5"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="5.5"
+    stroke-linecap="round"
+  />
+
+  <!-- Signature #ff9000 orange pill badge on the right -->
+  <rect x="30" y="14" width="27" height="36" rx="6" fill="#ff9000" />
+
+  <!-- Bold black letter 'H' inside the orange pill -->
+  <path
+    d="M35.5 20 H40.5 V29.5 H46.5 V20 H51.5 V44 H46.5 V34.5 H40.5 V44 H35.5 Z"
+    fill="#000000"
+  />
+</svg>
