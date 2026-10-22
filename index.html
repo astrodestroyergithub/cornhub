@@ -1959,8 +1959,6 @@
         // Continue the rest of your existing initialization here.
       }
 
-      initializeApp();
-
       function loadState() {
         try {
           const raw = localStorage.getItem(STORAGE_KEY);
@@ -3065,6 +3063,7 @@
       });
 
       // Initialize App
+      initializeApp();
       loadState();
       renderAll();
     })();
