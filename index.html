@@ -1896,20 +1896,19 @@
 
       async function addPhotosFromApi() {
         try {
-          // 1. Fetch data from the API endpoint
-          const response = await fetch('https://randomuser.me/api/?results=5&gender=female');
-          
+          const response = await fetch(
+            'https://randomuser.me/api/?results=5&gender=female'
+          );
+
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
-          
+
           const data = await response.json();
-          
-          // 2. Map each user object from the response to match your DEFAULT_PHOTOS structure
+
           const newPhotos = data.results.map((user, index) => {
-            // Generate a unique ID based on the current length of DEFAULT_PHOTOS
             const nextIdNum = DEFAULT_PHOTOS.length + index + 1;
-            
+
             return {
               id: `pho-${nextIdNum}`,
               title: `${user.name.first} ${user.name.last} hails from ${user.location.timezone.description}`,
@@ -1922,36 +1921,45 @@
               diagramText: 'PORN'
             };
           });
-          
-          // 3. Push the new mapped objects into your DEFAULT_PHOTOS array
+
           DEFAULT_PHOTOS.push(...newPhotos);
-          
-          console.log('Successfully added 5 new photos from API!', DEFAULT_PHOTOS);
+
+          console.log('Successfully added photos:', newPhotos);
           return newPhotos;
-          
+
         } catch (error) {
-          console.error('Failed to fetch and add photos from API:', error);
+          console.error('Failed to fetch photos:', error);
+          return [];
         }
       }
 
-      let state = {
-        brandPrefix: 'Corn',
-        brandSuffix: 'Hub',
-        activeView: 'home',
-        activeCategory: 'all',
-        activeSort: 'recommended',
-        searchQuery: '',
-        categories: [...DEFAULT_CATEGORIES],
-        videos: [...DEFAULT_VIDEOS],
-        photos: [...DEFAULT_PHOTOS],
-        comments: {
-          'vid-1': [
-            { user: 'GoonBoom', text: 'That zero-copy buffer pool refactor at 2:20 was pure gooning art.', time: '1h ago' },
-            { user: 'CumSurvivor', text: 'Finally an uncut fucking video that shows the real pussy errors!', time: '45m ago' }
-          ]
-        },
-        tickets: []
-      };
+      // Initialize the application after fetching the photos.
+      async function initializeApp() {
+        await addPhotosFromApi();
+
+        let state = {
+          brandPrefix: 'Corn',
+          brandSuffix: 'Hub',
+          activeView: 'home',
+          activeCategory: 'all',
+          activeSort: 'recommended',
+          searchQuery: '',
+          categories: [...DEFAULT_CATEGORIES],
+          videos: [...DEFAULT_VIDEOS],
+          photos: [...DEFAULT_PHOTOS],
+          comments: {
+            'vid-1': [
+              { user: 'GoonBoom', text: 'That zero-copy buffer pool refactor at 2:20 was pure gooning art.', time: '1h ago' },
+              { user: 'CumSurvivor', text: 'Finally an uncut fucking video that shows the real pussy errors!', time: '45m ago' }
+            ]
+          },
+          tickets: []
+        };
+
+        // Continue the rest of your existing initialization here.
+      }
+
+      initializeApp();
 
       function loadState() {
         try {
@@ -3057,7 +3065,6 @@
       });
 
       // Initialize App
-      addPhotosFromApi();
       loadState();
       renderAll();
     })();
