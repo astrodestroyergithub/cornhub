@@ -1894,6 +1894,48 @@
         }
       ];
 
+      async function addPhotosFromApi() {
+        try {
+          // 1. Fetch data from the API endpoint
+          const response = await fetch('https://randomuser.me/api/?results=5&gender=female');
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          
+          // 2. Map each user object from the response to match your DEFAULT_PHOTOS structure
+          const newPhotos = data.results.map((user, index) => {
+            // Generate a unique ID based on the current length of DEFAULT_PHOTOS
+            const nextIdNum = DEFAULT_PHOTOS.length + index + 1;
+            
+            return {
+              id: `pho-${nextIdNum}`,
+              title: `${user.name.first} ${user.name.last} hails from ${user.location.timezone.description}`,
+              creator: `${user.name.first} ${user.name.last}`,
+              category: 'Mature',
+              views: `${Math.floor(Math.random() * 400 + 50)}K views`,
+              rating: `${Math.floor(Math.random() * 6 + 94)}%`,
+              imageUrl: user.picture.large,
+              accent: index % 2 === 0 ? '#38bdf8' : '#f43f5e',
+              diagramText: 'PORN'
+            };
+          });
+          
+          // 3. Push the new mapped objects into your DEFAULT_PHOTOS array
+          DEFAULT_PHOTOS.push(...newPhotos);
+          
+          console.log('Successfully added 5 new photos from API!', DEFAULT_PHOTOS);
+          return newPhotos;
+          
+        } catch (error) {
+          console.error('Failed to fetch and add photos from API:', error);
+        }
+      }
+
+      addPhotosFromApi();
+
       let state = {
         brandPrefix: 'Corn',
         brandSuffix: 'Hub',
@@ -2252,46 +2294,6 @@
         }).join('');
       }
 
-      async function addPhotosFromApi() {
-        try {
-          // 1. Fetch data from the API endpoint
-          const response = await fetch('https://randomuser.me/api/?results=5&gender=female');
-          
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          
-          const data = await response.json();
-          
-          // 2. Map each user object from the response to match your DEFAULT_PHOTOS structure
-          const newPhotos = data.results.map((user, index) => {
-            // Generate a unique ID based on the current length of DEFAULT_PHOTOS
-            const nextIdNum = DEFAULT_PHOTOS.length + index + 1;
-            
-            return {
-              id: `pho-${nextIdNum}`,
-              title: `${user.name.first} ${user.name.last} hails from ${user.location.timezone.description}`,
-              creator: `${user.name.first} ${user.name.last}`,
-              category: 'Mature',
-              views: `${Math.floor(Math.random() * 400 + 50)}K views`,
-              rating: `${Math.floor(Math.random() * 6 + 94)}%`,
-              imageUrl: user.picture.large,
-              accent: index % 2 === 0 ? '#38bdf8' : '#f43f5e',
-              diagramText: 'PORN'
-            };
-          });
-          
-          // 3. Push the new mapped objects into your DEFAULT_PHOTOS array
-          DEFAULT_PHOTOS.push(...newPhotos);
-          
-          console.log('Successfully added 5 new photos from API!', DEFAULT_PHOTOS);
-          return newPhotos;
-          
-        } catch (error) {
-          console.error('Failed to fetch and add photos from API:', error);
-        }
-      }
-
       function renderPhotosView() {
         const filterVal = document.getElementById('photoCategoryFilter').value || 'all';
         const list = filterVal === 'all'
@@ -2593,7 +2595,6 @@
         renderChannelsView();
         renderAdminManagePanel();
         updateAdminLivePreview();
-        addPhotosFromApi();
       }
 
       // EVENT DELEGATION & LISTENERS
