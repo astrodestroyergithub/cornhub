@@ -1933,11 +1933,30 @@
         }
       }
 
+      let state = {
+        brandPrefix: 'Corn',
+        brandSuffix: 'Hub',
+        activeView: 'home',
+        activeCategory: 'all',
+        activeSort: 'recommended',
+        searchQuery: '',
+        categories: [...DEFAULT_CATEGORIES],
+        videos: [...DEFAULT_VIDEOS],
+        photos: [...DEFAULT_PHOTOS],
+        comments: {
+          'vid-1': [
+            { user: 'GoonBoom', text: 'That zero-copy buffer pool refactor at 2:20 was pure gooning art.', time: '1hago' },
+            { user: 'CumSurvivor', text: 'Finally an uncut fucking video that shows the real pussy errors!', time:'45m ago' }
+          ]
+        },
+        tickets: []
+      };
+
       // Initialize the application after fetching the photos.
       async function initializeApp() {
         await addPhotosFromApi();
 
-        let state = {
+        state = {
           brandPrefix: 'Corn',
           brandSuffix: 'Hub',
           activeView: 'home',
