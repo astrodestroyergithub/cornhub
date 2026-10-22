@@ -1934,8 +1934,6 @@
         }
       }
 
-      addPhotosFromApi();
-
       let state = {
         brandPrefix: 'Corn',
         brandSuffix: 'Hub',
@@ -3059,6 +3057,7 @@
       });
 
       // Initialize App
+      addPhotosFromApi();
       loadState();
       renderAll();
     })();
