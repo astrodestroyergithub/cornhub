@@ -1167,7 +1167,7 @@
 
   <!-- APPLICATION LOGIC -->
   <script>
-    (function () {
+    (async function () {
       const STORAGE_KEY = 'codehub_portal_state_v1';
 
       const DEFAULT_CATEGORIES = [
@@ -1975,10 +1975,10 @@
           tickets: []
         };
 
-        // Continue the rest of your existing initialization here.
+        console.log('Continue the rest of your existing initialization here');
       }
 
-      initializeApp();
+      await initializeApp();
 
       function loadState() {
         try {
